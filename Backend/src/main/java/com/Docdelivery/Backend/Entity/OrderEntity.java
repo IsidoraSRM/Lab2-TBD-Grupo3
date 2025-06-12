@@ -1,6 +1,7 @@
 package com.Docdelivery.Backend.Entity;
 
 import lombok.*;
+import org.locationtech.jts.geom.LineString;
 
 import java.time.LocalDateTime;
 
@@ -17,4 +18,5 @@ public class OrderEntity {
     private LocalDateTime fechaEntrega;
     private String estadoPedido;
     private String prioridadPedido;
+    private LineString ruta_estimada;
 }
