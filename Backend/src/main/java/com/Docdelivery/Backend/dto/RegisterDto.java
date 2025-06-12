@@ -1,6 +1,7 @@
 package com.Docdelivery.Backend.dto;
 
 import lombok.*;
+import org.locationtech.jts.geom.Point;
 
 import java.util.Date;
 
@@ -15,4 +16,6 @@ public class RegisterDto {
     private Date birthdate;
     private String password;
     private String role;
+    private Double latitud;
+    private Double longitud;
 }
