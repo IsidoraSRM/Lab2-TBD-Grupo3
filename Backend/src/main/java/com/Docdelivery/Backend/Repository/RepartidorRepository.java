@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.locationtech.jts.geom.Point;
 
 @Repository
 public class RepartidorRepository {
@@ -31,15 +32,16 @@ public class RepartidorRepository {
                     rs.getLong("repartidor_id"),
                     rs.getString("nombre"),
                     rs.getString("telefono"),
-                    rs.getBoolean("disponible")
+                    rs.getBoolean("disponible"),
+                    rs.getObject("ubicacion_actual", Point.class)
             );
         }
     }
 
     // Insertar repartidor en la base de datos
     public void save(RepartidorEntity repartidor) {
-        String sql = "INSERT INTO repartidor (nombre, telefono, disponible) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, repartidor.getNombre(), repartidor.getTelefono(), repartidor.getDisponible());
+        String sql = "INSERT INTO repartidor (nombre, telefono, disponible,ubicacion_actual) VALUES (?, ?, ?,ST_SetSRID(ST_MakePoint(?, ?), 4326) )";
+        jdbcTemplate.update(sql, repartidor.getNombre(), repartidor.getTelefono(), repartidor.getDisponible(),repartidor.getUbicacion_actual().getX(), repartidor.getUbicacion_actual().getY());
     }
 
     // Buscar repartidor por ID

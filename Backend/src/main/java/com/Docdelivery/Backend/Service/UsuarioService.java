@@ -4,6 +4,8 @@ import com.Docdelivery.Backend.Entity.ClienteEntity;
 import com.Docdelivery.Backend.Entity.UsuarioEntity;
 import com.Docdelivery.Backend.Repository.ClienteRepository;
 import com.Docdelivery.Backend.Repository.UsuarioRepository;
+
+import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +17,13 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository userRepo;
 
-    public UsuarioEntity register(String rut, String name, String email, String phone, Date fechaDeNacimiento, String password, String rol) {
+    public UsuarioEntity register(String rut, String name, String email, String phone, Date fechaDeNacimiento, String password, String rol, Point ubicacion) {
         Optional<UsuarioEntity> existenteEmail = userRepo.findByEmail(email);
         if (existenteEmail.isPresent()) { // Si el email ya está registrado
             throw new RuntimeException("El correo " + email + " ya está registrado. Usa uno diferente.");
         }
 
-        UsuarioEntity user = new UsuarioEntity(0, rut, name, email, phone, fechaDeNacimiento, password, rol);
+        UsuarioEntity user = new UsuarioEntity(0, rut, name, email, phone, fechaDeNacimiento, password, rol,ubicacion);
         userRepo.save(user); // Guardar el usuario en la base de datos
         return user;
     }

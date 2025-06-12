@@ -5,6 +5,7 @@ package com.Docdelivery.Backend.Repository;
 import com.Docdelivery.Backend.Entity.EmpresaAsociadaEntity;
 import com.Docdelivery.Backend.dto.VistaEmpresaDto;
 
+import org.locationtech.jts.geom.Point;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -77,7 +78,8 @@ public class EmpresaRepository {
                 rs.getLong("idEmpresaAsociada"),
                 rs.getString("nombreEmpresa"),
                 rs.getString("direccionEmpresa"),
-                rs.getString("tipoServicio")
+                rs.getString("tipoServicio"),
+                rs.getObject("ubicacion", Point.class)
         );
     }
 

@@ -3,6 +3,7 @@ package com.Docdelivery.Backend.Repository;
 
 import com.Docdelivery.Backend.Entity.ClienteEntity;
 import com.Docdelivery.Backend.dto.ClienteConTotalGastadoDTO;
+import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -28,15 +29,16 @@ public class  ClienteRepository {
                     rs.getString("nombre"),
                     rs.getString("direccion"),
                     rs.getString("email"),
-                    rs.getString("telefono")
+                    rs.getString("telefono"),
+                    rs.getObject("ubicacion", Point.class)
             );
         }
     }
 
     // Insertar cliente en la base de datos
     public void save(ClienteEntity cliente) {
-        String sql = "INSERT INTO cliente (nombre, direccion, email, telefono) VALUES (?, ?, ?, ?)";
-        jdbcTemplate.update(sql, cliente.getNombre(), cliente.getDireccion(), cliente.getEmail(), cliente.getTelefono());
+        String sql = "INSERT INTO cliente (nombre, direccion, email, telefono,ubicacion) VALUES (?, ?, ?, ?,ST_SetSRID(ST_MakePoint(?, ?), 4326) )";
+        jdbcTemplate.update(sql, cliente.getNombre(), cliente.getDireccion(), cliente.getEmail(), cliente.getTelefono(),cliente.getUbicacion().getX(), cliente.getUbicacion().getY());
     }
 
     // Buscar cliente por ID

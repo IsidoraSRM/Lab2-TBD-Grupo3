@@ -1,5 +1,6 @@
 package com.Docdelivery.Backend.Controller;
 
+import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ import com.Docdelivery.Backend.Repository.RepartidorRepository;
 import com.Docdelivery.Backend.Entity.UsuarioEntity;
 import com.Docdelivery.Backend.Entity.ClienteEntity;
 import com.Docdelivery.Backend.Entity.RepartidorEntity;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +36,7 @@ public class AuthController {
     private final ClienteRepository clienteRepository;
     private final RepartidorRepository repartidorRepository;
     private final PasswordEncoder passwordEncoder;
-
+    private final GeometryFactory geometryFactory = new GeometryFactory();
     @Autowired
     public AuthController(
             AuthenticationManager authenticationManager,
@@ -85,6 +88,7 @@ public class AuthController {
             response.put("token", jwt);
             response.put("userId", user.getIdUsuario());
             response.put("role", user.getRole());
+            response.put("ubicacion", user.getUbicacion().toString());
 
             return ResponseEntity.ok(response);
 
@@ -109,7 +113,12 @@ public class AuthController {
         try {
             String rol = (registerDto.getRole() == null || registerDto.getRole().isEmpty()) ? "CLIENTE" : registerDto.getRole();
             String hashedPassword = passwordEncoder.encode(registerDto.getPassword());
-
+            Point ubicacion = geometryFactory.createPoint(
+                new Coordinate(
+                    registerDto.getLongitud(),
+                    registerDto.getLatitud()
+                )
+            );
             UsuarioEntity newUser = new UsuarioEntity(
                     0,
                     registerDto.getRut(),
@@ -118,16 +127,18 @@ public class AuthController {
                     registerDto.getPhone(),
                     registerDto.getBirthdate(),
                     hashedPassword,
-                    rol
+                    rol,
+                    ubicacion
             );
 
             usuarioRepository.save(newUser);
 
             if ("CLIENTE".equalsIgnoreCase(rol)) {
-                ClienteEntity cliente = new ClienteEntity(0L, registerDto.getNameParam(), "Sin dirección", registerDto.getEmail(), registerDto.getPhone());
+
+                ClienteEntity cliente = new ClienteEntity(0L, registerDto.getNameParam(), "Sin dirección", registerDto.getEmail(), registerDto.getPhone(),ubicacion);
                 clienteRepository.save(cliente);
             } else if ("TRABAJADOR".equalsIgnoreCase(rol)) {
-                RepartidorEntity repartidor = new RepartidorEntity(0L, registerDto.getNameParam(), registerDto.getPhone(), true);
+                RepartidorEntity repartidor = new RepartidorEntity(0L, registerDto.getNameParam(), registerDto.getPhone(), true, ubicacion);
                 repartidorRepository.save(repartidor);
             }
 
@@ -139,24 +150,5 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/check-token")
-    public ResponseEntity<?> checkToken(@RequestHeader("Authorization") String token) {
-        try {
-            if (token == null || !token.startsWith("Bearer ")) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("El token no es válido.");
-            }
 
-            token = token.replace("Bearer ", "");
-            boolean isValid = jwtUtil.isValid(token);
-
-            if (!isValid) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("El token no es válido.");
-            }
-
-            return ResponseEntity.ok(Map.of("message", "Token válido."));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error en el servidor.");
-        }
-    }
 }

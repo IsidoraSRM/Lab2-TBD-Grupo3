@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.util.Date;
 
+import org.locationtech.jts.geom.Point;
+
 
 @Data
 @AllArgsConstructor
@@ -19,5 +21,6 @@ public class UsuarioEntity {
     private Date birthdate;
     private String password;
     private String role;
+    private Point ubicacion;
 
 }
