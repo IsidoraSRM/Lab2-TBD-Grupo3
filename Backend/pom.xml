@@ -73,6 +73,26 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- Hibernate Spatial (PostGIS) -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-spatial</artifactId>
+            <version>6.3.1.Final</version>
+        </dependency>
+
+        <!-- JTS Geometry types -->
+        <dependency>
+            <groupId>org.locationtech.jts</groupId>
+            <artifactId>jts-core</artifactId>
+            <version>1.18.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geolatte</groupId>
+            <artifactId>geolatte-geom</artifactId>
+            <version>1.8.2</version>  <!-- O la versión que estés usando -->
+        </dependency>
+
     </dependencies>
 
     <build>
