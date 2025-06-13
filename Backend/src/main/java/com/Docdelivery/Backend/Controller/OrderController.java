@@ -200,4 +200,13 @@ public class OrderController {
     }
 
 
+    // --------------------------- Lab 2 ---------------------------
+
+    // Consulta 5: Listar todos los pedidos cuya ruta estimada cruce más de 2 zonas de reparto.
+    @GetMapping("/zonas-cruzadas")
+    @Secured({"ROLE_CLIENTE", "ROLE_ADMIN", "ROLE_TRABAJADOR"})
+    public ResponseEntity<List<Map<String, Object>>> getPedidosConRutaCruce2Zonas() {
+        List<Map<String, Object>> pedidos = orderService.getPedidosConClienteYDetalleByRutaEstimadaCruce2Zonas();
+        return ResponseEntity.ok(pedidos);
+    }
 }

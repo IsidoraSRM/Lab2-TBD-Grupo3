@@ -4,13 +4,16 @@ import com.Docdelivery.Backend.Entity.ClienteEntity;
 import com.Docdelivery.Backend.Service.ClienteServices;
 import com.Docdelivery.Backend.dto.ClienteConTotalGastadoDTO; // Asegúrate de importar el DTO
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/customers")
+@RequestMapping("/api/customers")
 public class ClienteController {
 
     @Autowired
@@ -52,5 +55,16 @@ public class ClienteController {
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    // --------------------------- Lab 2 ---------------------------
+
+    // Consulta 6: Determinar los clientes que están a más de 5km de cualquier empresa o farmacia.
+    @GetMapping("/clientesMasDe5Km")
+    @Secured({"ROLE_CLIENTE", "ROLE_ADMIN", "ROLE_TRABAJADOR"})
+    public ResponseEntity<List<Map<String, Object>>> obtenerClientesMasDe5Km() {
+        List<Map<String, Object>> clientesMasDe5Km = clienteServices.obtenerClientesMasDe5Km();
+        return ResponseEntity.ok(clientesMasDe5Km);
     }
 }

@@ -121,4 +121,10 @@ public class OrderService {
     }
 
 
+    // --------------------------- Lab 2 ---------------------------
+
+    // Consulta 5: Listar todos los pedidos cuya ruta estimada cruce más de 2 zonas de reparto.
+    public List<Map<String, Object>> getPedidosConClienteYDetalleByRutaEstimadaCruce2Zonas() {
+        return orderRepository.getPedidosConClienteYDetalleByRutaEstimadaCruce2Zonas();
+    }
 }
