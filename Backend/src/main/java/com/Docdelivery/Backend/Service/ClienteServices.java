@@ -6,6 +6,8 @@ import com.Docdelivery.Backend.dto.ClienteConTotalGastadoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -27,5 +29,13 @@ public class ClienteServices {
 
     public void eliminarCliente(Long id) {
         clienteRepository.removeCliente(id);
+    }
+
+
+    // --------------------------- Lab 2 ---------------------------
+
+    // Consulta 6: Determinar los clientes que están a más de 5km de cualquier empresa o farmacia.
+    public List<Map<String, Object>> obtenerClientesMasDe5Km() {
+        return clienteRepository.obtenerClientesMasDe5Km();
     }
 }

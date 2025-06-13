@@ -11,7 +11,9 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -117,6 +119,27 @@ public class  ClienteRepository {
     public void removeCliente(Long id) {
         String sql = "DELETE FROM cliente WHERE cliente_id = ?";
         jdbcTemplate.update(sql, id);
+    }
+
+
+    // --------------------------- Lab 2 ---------------------------
+
+    // Consulta 6: Determinar los clientes que están a más de 5km de cualquier empresa o farmacia.
+    public List<Map<String, Object>> obtenerClientesMasDe5Km() {
+        String sql = "SELECT c.cliente_id, c.nombre, MIN(ST_Distance( " +
+                "    ST_Transform(c.ubicacion, 3857), " +
+                "    ST_Transform(e.ubicacion, 3857) " +
+                ")) AS distancia_minima " +
+                "FROM cliente c " +
+                "JOIN EmpresaAsociada e ON TRUE " +
+                "GROUP BY c.cliente_id, c.nombre " +
+                "HAVING MIN(ST_Distance(ST_Transform(c.ubicacion, 3857), ST_Transform(e.ubicacion, 3857))) > 5000 ";
+        try {
+            return jdbcTemplate.queryForList(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
 
 }

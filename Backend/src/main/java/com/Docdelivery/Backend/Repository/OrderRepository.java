@@ -248,6 +248,26 @@ public class OrderRepository {
         }
     }
 
+
+    // --------------------------- Lab 2 ---------------------------
+
+    // Consulta 5: Listar todos los pedidos cuya ruta estimada cruce más de 2 zonas de reparto.
+    public List<Map<String, Object>> getPedidosConClienteYDetalleByRutaEstimadaCruce2Zonas() {
+        String sql = "SELECT o.idPedido, e.nombreEmpresa, COUNT(z.zona_id) AS zonas_cruzadas " +
+                "FROM OrderEntity o " +
+                "JOIN EmpresaAsociada e ON o.idEmpresaAsociada = e.idEmpresaAsociada " +
+                "JOIN zonas_cobertura z ON ST_Intersects(o.ruta_estimada, z.geom) " +
+                "GROUP BY o.idPedido, e.nombreEmpresa " +
+                "HAVING COUNT(z.zona_id) > 2";
+
+        try {
+            return jdbcTemplate.queryForList(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
 }
 
 
