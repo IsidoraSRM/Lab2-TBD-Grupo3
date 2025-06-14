@@ -93,7 +93,7 @@ public class DetallePedidoRepository {
             d.direccionDestino,
             ST_Distance(
                 ST_Transform(e.ubicacion, 3857),
-                ST_Transform(d.ubicacion, 3857)
+                ST_Transform(d.ubicacionDestino, 3857)
             ) / 1000 AS distancia_km
         FROM DetallePedido d
         JOIN OrderEntity o ON d.idPedido = o.idPedido
