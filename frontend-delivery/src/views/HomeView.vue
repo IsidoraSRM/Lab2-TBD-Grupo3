@@ -52,7 +52,7 @@
     },
     methods: {
       getImageUrl(imageName) {
-        return require(`@/assets/${imageName}`);
+        return new URL(`../assets/${imageName}`, import.meta.url).href
       },
       nextSlide() {
         this.currentSlide = (this.currentSlide + 1) % this.images.length;

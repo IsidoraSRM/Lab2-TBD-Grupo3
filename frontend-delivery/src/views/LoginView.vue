@@ -11,7 +11,7 @@
           <input 
             type="email" 
             id="email" 
-            v-model="credentials.email" 
+            v-model="email" 
             placeholder="Ingrese su correo" 
             required
           />
@@ -22,7 +22,7 @@
           <input 
             type="password" 
             id="password" 
-            v-model="credentials.password" 
+            v-model="password" 
             placeholder="Ingrese su contraseña" 
             required
           />
@@ -128,6 +128,7 @@
 </template>
 
 <script>
+import { authService } from '../services/authService'
 import axios from 'axios';
 
 export default {
@@ -135,10 +136,10 @@ export default {
   data() {
     return {
       isLogin: true,
-      credentials: {
-        email: '',
-        password: ''
-      },
+      
+      email: '',
+      password: '',
+      
       registerData: {
         rut: '',
         nameParam: '',
@@ -154,38 +155,20 @@ export default {
   },
   methods: {
     async loginUser() {
-      this.loading = true;
-      this.errorMessage = '';
-      
+      this.errorMsg = ''
       try {
-        const response = await axios.post(
-          process.env.VUE_APP_API_URL + 'auth/login',
-          this.credentials
-        );
-        
-        // Guardar token y datos de usuario en localStorage
-        localStorage.setItem('authToken', response.data.token);
-        localStorage.setItem('userId', response.data.userId);
-        localStorage.setItem('userRole', response.data.role);
-        
-        
-          // Guardar el email para usarlo como nombre si es necesario
-        localStorage.setItem('userEmail', this.credentials.email);
-
-            // Si el backend devuelve el nombre en la respuesta, guárdalo
-        if (response.data.name) {
-          localStorage.setItem('userName', response.data.name);
-        }
-    
-        
-        // Redireccionar según el rol
-        this.redirectBasedOnRole(response.data.role);
-        
-      } catch (error) {
-        console.error('Error de login:', error);
-        this.errorMessage = error.response?.data || 'Error al iniciar sesión. Verifique sus credenciales.';
-      } finally {
-        this.loading = false;
+        const res = await authService.login({
+          email: this.email,
+          password: this.password
+        })
+        const { token, userId, role } = res.data
+        localStorage.setItem('authToken', token)
+        localStorage.setItem('userId', userId)
+        localStorage.setItem('userRole', role)
+        this.$router.push('/')
+      } catch (err) {
+        this.errorMsg = err.response?.data || err.message
+        console.error('Error de login:', err)
       }
     },
     
