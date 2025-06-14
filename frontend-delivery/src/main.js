@@ -9,6 +9,10 @@ import HomeView from './views/HomeView.vue'
 import HomeViewClient from './views/HomeViewClient.vue'
 import LoginView from './views/LoginView.vue'
 
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
 
 // Define your routes
 const routes = [
@@ -89,7 +93,13 @@ router.beforeEach((to, from, next) => {
   }
 });
 
+const vuetify = createVuetify({
+  components,
+  directives,
+})
+
 // Create the app and use the router
 const app = createApp(App)
 app.use(router)
+app.use(vuetify)
 app.mount('#app')
