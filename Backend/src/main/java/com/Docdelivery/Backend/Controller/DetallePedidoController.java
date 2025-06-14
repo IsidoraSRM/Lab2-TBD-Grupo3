@@ -10,6 +10,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/detallepedidos")
@@ -84,5 +85,16 @@ public class DetallePedidoController {
     @Secured({"ROLE_CLIENTE", "ROLE_ADMIN"})
     public ResponseEntity<List<ServiciosDto>> getServiciosMasPedidos() {
         return ResponseEntity.ok(detallePedidoService.obtenerServiciosMasPedidos());
+    }
+
+
+    // --------------------------- Lab 2 ---------------------------
+
+    // Consulta 4: Identificar el punto de entrega más lejano desde cada empresa asociada.
+    @GetMapping("/punto-lejano")
+    @Secured({"ROLE_CLIENTE", "ROLE_ADMIN", "ROLE_TRABAJADOR"})
+    public ResponseEntity<List<Map<String, Object>>> getPuntosEntregaMasLejano() {
+        List<Map<String, Object>> puntosEntregaMasLejano = detallePedidoService.getPuntosEntregaMasLejano();
+        return ResponseEntity.ok(puntosEntregaMasLejano);
     }
 }

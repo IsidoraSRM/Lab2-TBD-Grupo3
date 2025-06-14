@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -52,5 +53,13 @@ public class DetallePedidoService {
     // Get servicios más pedidos (existing method)
     public List<ServiciosDto> obtenerServiciosMasPedidos() {
         return detallePedidoRepository.getServiciosMasPedidosUltimoMes();
+    }
+
+
+    // --------------------------- Lab 2 ---------------------------
+
+    // Consulta 4: Identificar el punto de entrega más lejano desde cada empresa asociada.
+    public List<Map<String, Object>> getPuntosEntregaMasLejano() {
+        return detallePedidoRepository.getPuntosEntregaMasLejano();
     }
 }

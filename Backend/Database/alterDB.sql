@@ -7,6 +7,7 @@ ALTER TABLE repartidor ADD COLUMN ubicacion_actual GEOMETRY(Point, 4326);
 ALTER TABLE EmpresaAsociada ADD COLUMN ubicacion GEOMETRY(Point, 4326);
 ALTER TABLE OrderEntity ADD COLUMN ruta_estimada GEOMETRY(LineString, 4326);
 ALTER TABLE usuarios  ADD COLUMN ubicacion geometry(Point,4326);
+ALTER TABLE detallepedido  ADD COLUMN ubicacion geometry(Point,4326);
 
 
 -- Crear tabla de zonas de cobertura
