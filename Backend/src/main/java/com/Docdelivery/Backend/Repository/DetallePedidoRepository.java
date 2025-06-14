@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
+import java.util.Collections;
 
 @Repository
 public class DetallePedidoRepository {
@@ -21,12 +23,13 @@ public class DetallePedidoRepository {
         @Override
         public DetallePedidoEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new DetallePedidoEntity(
-                rs.getLong("idDetallePedido"),
-                rs.getLong("idPedido"),
-                rs.getLong("idServicio"),
-                rs.getInt("cantidad"),
-                rs.getString("direccionDestino"),
-                rs.getString("direccionInicio")
+                    rs.getLong("idDetallePedido"),
+                    rs.getLong("idPedido"),
+                    rs.getLong("idServicio"),
+                    rs.getInt("cantidad"),
+                    rs.getString("direccionDestino"),
+                    rs.getString("direccionInicio"),
+                    rs.getObject("ubicacion", org.locationtech.jts.geom.Point.class)
             );
         }
     }
@@ -80,5 +83,42 @@ public class DetallePedidoRepository {
                 rs.getInt("cantidad_pedidos")
         ));
     }
+
+
+    // Consulta 4: Identificar el punto de entrega más lejano desde cada empresa asociada.
+    public List<Map<String, Object>> getPuntosEntregaMasLejano() {
+        String sql = """
+        SELECT 
+            e.nombreEmpresa, 
+            d.direccionDestino,
+            ST_Distance(
+                ST_Transform(e.ubicacion, 3857),
+                ST_Transform(d.ubicacion, 3857)
+            ) / 1000 AS distancia_km
+        FROM DetallePedido d
+        JOIN OrderEntity o ON d.idPedido = o.idPedido
+        JOIN EmpresaAsociada e ON o.idEmpresaAsociada = e.idEmpresaAsociada
+        WHERE ST_Distance(
+            ST_Transform(e.ubicacion, 3857),
+            ST_Transform(d.ubicacion, 3857)
+        ) = (
+            SELECT MAX(ST_Distance(
+                ST_Transform(e2.ubicacion, 3857),
+                ST_Transform(d2.ubicacion, 3857)
+            ))
+            FROM DetallePedido d2
+            JOIN OrderEntity o2 ON d2.idPedido = o2.idPedido
+            JOIN EmpresaAsociada e2 ON o2.idEmpresaAsociada = e2.idEmpresaAsociada
+            WHERE e2.idEmpresaAsociada = e.idEmpresaAsociada
+        )
+        ORDER BY distancia_km DESC
+    """;
+    try {
+        return jdbcTemplate.queryForList(sql);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return Collections.emptyList();
+    }
+}
     
 }
