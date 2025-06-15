@@ -355,9 +355,9 @@ export default {
 
 <style scoped>
 .admin-dashboard {
-  padding: 20px;
+  background-color: var(--bg-primary);
   min-height: 100vh;
-  background-color: #f5f7fa;
+  padding: 2rem;
 }
 
 .admin-header {
@@ -549,5 +549,93 @@ export default {
 
 .results-table tr:last-child td {
   border-bottom: none;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background-color: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-blue);
+  box-shadow: 0 4px 6px var(--blue-glow);
+}
+
+.stat-title {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.data-table {
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-blue);
+}
+
+.table-header {
+  background-color: var(--dark-gray);
+  color: var(--text-primary);
+  padding: 1rem;
+}
+
+.table-row {
+  border-bottom: 1px solid var(--border-blue);
+  transition: background-color 0.3s;
+}
+
+.table-row:hover {
+  background-color: var(--bg-secondary);
+}
+
+.table-cell {
+  padding: 1rem;
+  color: var(--text-secondary);
+}
+
+.action-button {
+  background-color: var(--primary-blue);
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.action-button:hover {
+  background-color: var(--primary-blue-hover);
+}
+
+.filter-section {
+  background-color: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  border: 1px solid var(--border-blue);
+}
+
+.search-input {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-blue);
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+}
+
+.search-input::placeholder {
+  color: var(--placeholder-color);
 }
 </style>

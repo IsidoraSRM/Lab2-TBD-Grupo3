@@ -266,14 +266,14 @@ export default {
 
 <style scoped>
 .home-view {
-    background-color: #F5F5F5;
+    background-color: var(--bg-primary);
     min-height: calc(100vh - 120px); /* Ajustar según tu navbar y footer */
-
+    padding: 2rem;
 }
 
 /* Estilos para las tarjetas */
 .card {
-    background: white;
+    background-color: var(--card-bg);
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     padding: 20px;
@@ -316,12 +316,12 @@ export default {
 }
 
 .welcome-card h2 {
-    color: #125A6C;
+    color: var(--text-primary);
     margin-bottom: 10px;
 }
 
 .welcome-card p {
-    color: #666;
+    color: var(--text-secondary);
     margin-bottom: 25px;
     font-size: 18px;
 }
@@ -347,12 +347,12 @@ export default {
 }
 
 .btn-primary {
-    background-color: #20D547;
-    color: white;
+    background-color: var(--primary-blue);
+    color: var(--text-primary);
 }
 
 .btn-primary:hover {
-    background-color: #1AB53D;
+    background-color: var(--primary-blue-hover);
     transform: translateY(-2px);
 }
 
@@ -457,31 +457,25 @@ export default {
 }
 
 .status-badge {
-    padding: 5px 10px;
+    padding: 0.5rem 1rem;
     border-radius: 20px;
-    font-size: 13px;
+    font-size: 0.875rem;
     font-weight: 500;
-    display: inline-block;
 }
 
-.status-badge.success {
-    background-color: rgba(32, 213, 71, 0.1);
-    color: #20D547;
+.status-active {
+    background-color: var(--primary-blue);
+    color: var(--text-primary);
 }
 
-.status-badge.warning {
-    background-color: rgba(245, 196, 72, 0.2);
-    color: #B55529;
+.status-pending {
+    background-color: var(--dark-gray);
+    color: var(--text-secondary);
 }
 
-.status-badge.info {
-    background-color: rgba(18, 90, 108, 0.1);
-    color: #125A6C;
-}
-
-.status-badge.danger {
-    background-color: rgba(181, 85, 41, 0.1);
-    color: #B55529;
+.status-completed {
+    background-color: var(--blue-neon);
+    color: var(--text-primary);
 }
 
 .no-orders {

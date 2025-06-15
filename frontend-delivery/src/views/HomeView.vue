@@ -230,4 +230,113 @@
         font-size: 1.2rem;
     }
 }
+
+.home {
+  background-color: var(--bg-primary);
+  min-height: calc(100vh - 120px);
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-section {
+  background-color: var(--bg-secondary);
+  padding: 3rem 2rem;
+  border-radius: 8px;
+  margin: 2rem auto;
+  max-width: 800px;
+  color: var(--text-primary);
+  text-align: center;
+  border: 1px solid var(--border-blue);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  line-height: 1.6;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 4rem;
+  padding: 0 1rem;
+}
+
+.feature-card {
+  background-color: var(--bg-secondary);
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-blue);
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.feature-title {
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.feature-description {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.cta-button {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--border-blue);
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: var(--text-primary);
+  color: var(--bg-primary);
+}
+
+@media (max-width: 768px) {
+  .home {
+    padding: 1rem;
+  }
+
+  .hero-section {
+    padding: 2rem 1rem;
+    margin: 1rem auto;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+    margin-top: 2rem;
+  }
+}
 </style>

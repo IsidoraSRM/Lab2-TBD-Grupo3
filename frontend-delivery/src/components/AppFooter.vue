@@ -24,16 +24,53 @@ export default {
 
 <style scoped>
 .footer {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    padding: 1.5rem 0;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    margin-top: 4rem;
+    min-height: 60px;
+    z-index: 10;
+}
+
+.footer-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #125A6C;
-    color: #E2DCD2;
-    padding: 5px 20px;
-    font-size: 12px;
-    height: 40px; /* Altura total incluyendo íconos */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.footer-links {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.footer-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+    white-space: nowrap;
+}
+
+.footer-links a:hover {
+    color: var(--blue-neon);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 1rem;
+    margin-top: 1rem;
+    border-top: 1px solid var(--border-blue);
+    color: var(--text-secondary);
+    font-size: 0.8rem;
 }
 
 .footer-left,
@@ -84,16 +121,14 @@ export default {
     transform: scale(1.1);
 }
 
-@media (max-width: 600px) {
-    .footer {
+@media (max-width: 768px) {
+    .footer-content {
         flex-direction: column;
-        height: auto;
-        gap: 5px;
-        padding: 8px 10px;
         text-align: center;
+        gap: 1.5rem;
     }
-    .footer-center {
-        flex-wrap: wrap;
+
+    .footer-links {
         justify-content: center;
     }
 }

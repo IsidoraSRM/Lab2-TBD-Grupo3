@@ -25,10 +25,27 @@ export default {
 
 
 <style>
+:root {
+  /* Colores del sistema */
+  --bg-primary: #0a0c14;
+  --bg-secondary: #12141f;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a3bd;
+  --primary-blue: #3b82f6;
+  --primary-blue-hover: #2563eb;
+  --border-blue: #2a3a6d;
+  --blue-neon: #60a5fa;
+  --blue-glow: rgba(59, 130, 246, 0.5);
+  --card-bg: #1A2238;
+  --placeholder-color: #6C757D;
+  --blue-gradient-start: #3A6BFF;
+  --blue-gradient-end: #5A8BFF;
+  --dark-gray: #2C3A58;
+}
 
-/* Para agregar en App.vue o en un archivo CSS global */
 html, body {
-  background-color: #E2DCD2; /* Gris cálido */
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   margin: 0;
   padding: 0;
   height: 100%;
@@ -36,42 +53,47 @@ html, body {
 
 /* Opcional: para personalizar la barra de desplazamiento */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 100px;
-  
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(18, 90, 108, 0.596);
-  
+  background: var(--bg-secondary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(18, 90, 108); /* Azul petróleo */
-  border-radius: 5px;
+  background: var(--border-blue);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #B55529 ; /* Naranjo quemado */
+  background: var(--primary-blue);
 }
 
 #app {
-  background-color: #E2DCD2;
-  height: 100%;
-  width: 100%;
-  font-family: Arial, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-top: 20px;
 }
 
+.v-main {
+  flex: 1 0 auto;
+  background-color: var(--bg-primary);
+  min-height: calc(100vh - 120px);
+}
 
 .main-content {
-  flex: 1; /* Hace que este contenedor ocupe todo el espacio disponible */
-  overflow: auto;
-  padding-top: 20px; /* Espacio para el navbar fijo */
-  padding-bottom: 110px; /* Espacio para el footer fijo */
-  height: 100%;
+  flex: 1 0 auto;
+  padding: 20px;
+  margin-bottom: 60px; /* Espacio para el footer */
+}
+
+/* Asegurarse de que el footer siempre esté al final */
+.v-application {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 footer {

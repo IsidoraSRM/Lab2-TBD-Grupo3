@@ -311,8 +311,6 @@ export default {
   font-weight: 600;
 }
 
-
-
 .status-badge {
   padding: 4px 8px;
   border-radius: 12px;
@@ -408,5 +406,96 @@ export default {
 }
 .margin-right {
   margin-right: 10px; /* Ajusta este valor según necesites */
+}
+
+.order-list {
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 1.5rem;
+  border: 1px solid var(--border-blue);
+}
+
+.order-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-blue);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.order-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px var(--blue-glow);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-blue);
+}
+
+.order-title {
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.order-status {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+}
+
+.status-pending {
+  background-color: var(--dark-gray);
+  color: var(--text-secondary);
+}
+
+.status-processing {
+  background-color: var(--primary-blue);
+  color: var(--text-primary);
+}
+
+.status-completed {
+  background-color: var(--blue-neon);
+  color: var(--text-primary);
+}
+
+.order-details {
+  color: var(--text-secondary);
+  margin: 1rem 0;
+}
+
+.order-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.action-button {
+  background-color: var(--primary-blue);
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.action-button:hover {
+  background-color: var(--primary-blue-hover);
+}
+
+.action-button.secondary {
+  background-color: var(--dark-gray);
+  color: var(--text-secondary);
+}
+
+.action-button.secondary:hover {
+  background-color: var(--bg-secondary);
 }
 </style>

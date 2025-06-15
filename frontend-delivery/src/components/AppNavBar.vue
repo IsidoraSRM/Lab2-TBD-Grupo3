@@ -95,22 +95,22 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #125A6C;
+    background-color: var(--bg-secondary);
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1000;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px var(--blue-glow);
     padding: 1rem 1rem;
-
+    color: var(--text-primary);
 }
 
 .title {
     font-size: 1.5rem;
     font-weight: bolder;
     text-decoration: none;
-    color: #E2DCD2;
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -132,15 +132,16 @@ ul {
 li a {
     display: block;
     text-decoration: none;
-    color: #E2DCD2;
+    color: var(--text-secondary);
     font-weight: bold;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
-    transition: background-color 0.3s;
+    transition: color 0.3s, background-color 0.3s;
 }
 
 li a:not(.active):hover {
-    background-color: #B55529;
+    color: var(--text-primary);
+    background-color: var(--primary-blue);
 }
 
 /* Menú hamburguesa */
@@ -158,7 +159,7 @@ li a:not(.active):hover {
 .menu span {
     height: 0.4rem;
     width: 100%;
-    background-color: #E2DCD2;
+    background-color: var(--text-primary);
     border-radius: 0.2rem;
     transition: all 0.3s;
 }
@@ -176,7 +177,7 @@ li a:not(.active):hover {
         top: 100%;
         left: 0;
         right: 0;
-        background-color: #125A6C;
+        background-color: var(--bg-secondary);
         padding: 1rem;
     }
     
@@ -188,5 +189,55 @@ li a:not(.active):hover {
         width: 100%;
         text-align: center;
     }
+}
+
+.navbar {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 1rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px var(--blue-glow);
+}
+
+.nav-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  transition: color 0.3s, background-color 0.3s;
+  border-radius: 4px;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--text-primary);
+  background-color: var(--primary-blue);
+}
+
+.dropdown-menu {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-blue);
+  box-shadow: 0 4px 6px var(--blue-glow);
+}
+
+.dropdown-item {
+  color: var(--text-secondary);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.dropdown-item:hover {
+  background-color: var(--primary-blue);
+  color: var(--text-primary);
+}
+
+.user-info {
+  color: var(--text-primary);
+  background-color: var(--dark-gray);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-blue);
 }
 </style>
