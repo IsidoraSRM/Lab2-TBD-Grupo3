@@ -38,4 +38,10 @@ public class ClienteServices {
     public List<Map<String, Object>> obtenerClientesMasDe5Km() {
         return clienteRepository.obtenerClientesMasDe5Km();
     }
+
+    // Consulta 2: Verificar si los clientes están dentro de una zona de cobertura (con buffer de 1km)
+    public List<Map<String, Object>> verificarClientesEnZonas() {
+        return clienteRepository.verificarClientesEnZonas();
+    }
+
 }

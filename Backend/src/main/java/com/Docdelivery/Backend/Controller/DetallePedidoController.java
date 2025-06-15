@@ -97,4 +97,15 @@ public class DetallePedidoController {
         List<Map<String, Object>> puntosEntregaMasLejano = detallePedidoService.getPuntosEntregaMasLejano();
         return ResponseEntity.ok(puntosEntregaMasLejano);
     }
+
+
+    //Consulta 1 para obtener los 5 puntos de entrega más cercanos a la empresa "Express Chile"
+    @GetMapping("/entregasCercanas")
+    @Secured({"ROLE_ADMIN", "ROLE_CLIENTE", "ROLE_TRABAJADOR"})
+    public ResponseEntity<List<Map<String, Object>>> obtenerEntregasCercanas(
+            @RequestParam String empresa) {
+        List<Map<String, Object>> entregas = detallePedidoService.obtenerEntregasCercanasAEmpresa(empresa);
+        return ResponseEntity.ok(entregas);
+    }
+
 }
