@@ -2,6 +2,7 @@
 package com.Docdelivery.Backend.Service;
 
 import com.Docdelivery.Backend.Entity.RepartidorEntity;
+import com.Docdelivery.Backend.dto.RepartidorDistanciaDTO;
 import com.Docdelivery.Backend.dto.TopRepartidorDto;
 import com.Docdelivery.Backend.Repository.RepartidorRepository;
 import com.Docdelivery.Backend.dto.VistaRepartidorDto;
@@ -47,5 +48,9 @@ public class RepartidorService {
 }
     public List<VistaRepartidorDto> obtenerDesempeno() {
         return repartidorRepository.obtenerDesempenoRepartidores();
+    }
+
+    public List<RepartidorDistanciaDTO> obtenerDistanciasUltimoMes() {
+        return repartidorRepository.calcularDistanciaRecorridaUltimoMes();
     }
 }

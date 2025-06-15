@@ -2,6 +2,7 @@
 package com.Docdelivery.Backend.Controller;
 
 import com.Docdelivery.Backend.Entity.RepartidorEntity;
+import com.Docdelivery.Backend.dto.RepartidorDistanciaDTO;
 import com.Docdelivery.Backend.dto.TopRepartidorDto;
 import com.Docdelivery.Backend.Service.RepartidorService;
 import com.Docdelivery.Backend.dto.VistaRepartidorDto;
@@ -82,6 +83,12 @@ public class RepartidorController {
     @Secured({"ROLE_ADMIN"})
     public ResponseEntity<List<VistaRepartidorDto>> obtenerDesempeno() {
         return ResponseEntity.ok(repartidorService.obtenerDesempeno());
+    }
+
+    @GetMapping("/distancia-ultimo-mes")
+    public ResponseEntity<List<RepartidorDistanciaDTO>> getDistanciasRecorridas() {
+        List<RepartidorDistanciaDTO> distancias = repartidorService.obtenerDistanciasUltimoMes();
+        return ResponseEntity.ok(distancias);
     }
 
 }

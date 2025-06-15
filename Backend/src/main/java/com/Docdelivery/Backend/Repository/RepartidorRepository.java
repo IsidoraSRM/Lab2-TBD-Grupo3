@@ -2,6 +2,7 @@ package com.Docdelivery.Backend.Repository;
 
 
 import com.Docdelivery.Backend.Entity.RepartidorEntity;
+import com.Docdelivery.Backend.dto.RepartidorDistanciaDTO;
 import com.Docdelivery.Backend.dto.TopRepartidorDto;
 
 import com.Docdelivery.Backend.dto.VistaRepartidorDto;
@@ -145,6 +146,33 @@ public class RepartidorRepository {
         return rowsAffected > 0;
     }
 
+    public List<RepartidorDistanciaDTO> calcularDistanciaRecorridaUltimoMes() {
+        String sql = """
+        SELECT 
+            r.repartidor_id,
+            r.nombre,
+            SUM(ST_Distance(dp.ubicacionInicio::geography, dp.ubicacionDestino::geography)) AS distancia_total_metros
+        FROM 
+            repartidor r
+        JOIN 
+            orderentity o ON o.repartidor_id = r.repartidor_id
+        JOIN 
+            detallepedido dp ON dp.idpedido = o.idpedido
+        WHERE 
+            o.fechaentrega >= NOW() - INTERVAL '1 month'
+            AND dp.ubicacionInicio IS NOT NULL
+            AND dp.ubicacionDestino IS NOT NULL
+        GROUP BY 
+            r.repartidor_id, r.nombre;
+    """;
 
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                new RepartidorDistanciaDTO(
+                        rs.getLong("repartidor_id"),
+                        rs.getString("nombre"),
+                        rs.getDouble("distancia_total_metros")
+                )
+        );
+    }
 
 }
