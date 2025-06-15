@@ -39,14 +39,22 @@ ON
 
 
 -- consulta numero 3
-SELECT EmpresaAsociada.nombreEmpresa, COUNT(*) AS entregas_fallidas  -- Selecciona el nombre de la empresa y cuenta cuántos pedidos fallidos tiene
-FROM OrderEntity                                                     -- Desde la tabla de pedidos (OrderEntity)
-JOIN EmpresaAsociada                                                 -- Une con la tabla EmpresaAsociada usando la clave foránea que vincula cada pedido con su empresa
-  ON OrderEntity.idEmpresaAsociada = EmpresaAsociada.idEmpresaAsociada
-WHERE OrderEntity.estadoPedido ILIKE 'Fallido'                       -- Filtra solo los pedidos cuyo estado sea 'Fallido'
-GROUP BY EmpresaAsociada.nombreEmpresa                               -- Agrupa los resultados por nombre de empresa
-ORDER BY entregas_fallidas DESC;                                     -- Ordena de mayor a menor según la cantidad de fallos
-
+SELECT
+    r.repartidor_id,
+    r.nombre,
+    SUM(ST_Distance(dp.ubicacionInicio::geography, dp.ubicacionDestino::geography)) AS distancia_total_metros
+FROM
+    repartidor r
+        JOIN
+    orderentity o ON o.repartidor_id = r.repartidor_id
+        JOIN
+    detallepedido dp ON dp.idpedido = o.idpedido
+WHERE
+    o.fechaentrega >= NOW() - INTERVAL '1 month'
+  AND dp.ubicacionInicio IS NOT NULL
+  AND dp.ubicacionDestino IS NOT NULL
+GROUP BY
+    r.repartidor_id, r.nombre;
 
 
 -- consulta numero 4
