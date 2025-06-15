@@ -16,7 +16,7 @@ ALTER TABLE detallepedido  ADD COLUMN ubicacionDestino geometry(Point,4326);
 CREATE TABLE zonas_cobertura (
     zona_id SERIAL PRIMARY KEY,
     nombre VARCHAR(100),
-    geom GEOMETRY(Polygon, 4326)
+    geom GEOMETRY(MultiPolygon, 4326) -- Polygon
 );
 
 -- Insertar ubicaciones simuladas (coordenadas reales aproximadas)
