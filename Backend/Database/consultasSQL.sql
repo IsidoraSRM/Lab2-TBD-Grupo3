@@ -1,3 +1,43 @@
+-- Consulta 1 para obtener los 5 puntos de entrega más cercanos a la empresa "Express Chile"
+SELECT 
+    dp.idDetallePedido,
+    ea.nombreEmpresa,
+    dp.direccionDestino,
+    ROUND(ST_Distance(ea.ubicacion::geography, dp.ubicacionDestino::geography)) AS distancia_metros,
+    ST_MakeLine(ea.ubicacion, dp.ubicacionDestino) AS ruta_estimada
+FROM 
+    detallepedido dp
+JOIN 
+    servicios s ON dp.idServicio = s.idServicio
+JOIN 
+    empresaasociada ea ON s.idEmpresaAsociada = ea.idEmpresaAsociada
+WHERE 
+    ea.nombreEmpresa ILIKE '%Express Chile%'  
+ORDER BY 
+    distancia_metros
+LIMIT 5;
+
+
+
+-- Consulta 2 para verificar si un cliente está dentro de una zona de cobertura usando ST_Buffer
+SELECT 
+    c.cliente_id,
+    c.nombre,
+    z.zona_id,
+    z.nombre AS nombre_zona
+FROM 
+    cliente c
+JOIN 
+    zonas_cobertura z
+ON 
+    ST_Intersects(
+        ST_Buffer(c.ubicacion::geography, 1000)::geometry,  -- Buffer de 1000 metros alrededor del cliente
+        z.geom
+    );
+
+
+
+
 -- consulta numero 3
 SELECT EmpresaAsociada.nombreEmpresa, COUNT(*) AS entregas_fallidas  -- Selecciona el nombre de la empresa y cuenta cuántos pedidos fallidos tiene
 FROM OrderEntity                                                     -- Desde la tabla de pedidos (OrderEntity)

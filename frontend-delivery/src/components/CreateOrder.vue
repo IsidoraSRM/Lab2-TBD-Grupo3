@@ -350,6 +350,17 @@ export default {
   --text-color: #333;
   --text-light: #666;
   --border-color: #e0e0e0;
+  --card-bg: #fff;
+  --text-primary: #333;
+  --bg-secondary: #f8f9fa;
+  --border-blue: #e0e0e0;
+  --primary-blue: #125A6C;
+  --primary-blue-hover: #1b7d95;
+  --blue-glow: rgba(18, 90, 108, 0.1);
+  --dark-gray: #f8f9fa;
+  --text-secondary: #666;
+  --placeholder-color: #aaa;
+  --blue-neon: #B55529;
 }
 
 /* Estilos generales */

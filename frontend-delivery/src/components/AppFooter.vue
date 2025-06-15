@@ -6,95 +6,94 @@ export default {
 
 <template>
     <footer class="footer">
-        <div class="footer-left">
-            <span class="footer-text">© 2025 DocDelivery. Grupo 3 TBD.</span>
-        </div>
-        <div class="footer-center">
-            <a href="#" class="footer-link">Políticas de Privacidad</a>
-            <a href="#" class="footer-link">Términos de Servicio</a>
-            <a href="#" class="footer-link">Contáctanos</a>
-        </div>
-        <div class="footer-right">
-            <a href="#" class="footer-icon" aria-label="Instagram">
-                <i class="fab fa-instagram"></i>
-            </a>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/IsidoraSRM/Lab2-TBD-Grupo3.git" target="_blank" class="github-link">
+                    <span>Repositorio de GitHub	</span>
+                </a>
+                <a href="#" class="footer-link">Términos</a>
+                <a href="#" class="footer-link">Privacidad</a>
+                <a href="#" class="footer-link">Contacto</a>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024 DocDelivery. Todos los derechos reservados.</p>
+            </div>
         </div>
     </footer>
 </template>
 
 <style scoped>
 .footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #125A6C;
-    color: #E2DCD2;
-    padding: 5px 20px;
-    font-size: 12px;
-    height: 40px; /* Altura total incluyendo íconos */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
-}
-
-.footer-left,
-.footer-center,
-.footer-right {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    padding: 1.25rem 0;
+    width: 100%;
+    min-height: 80px;
     display: flex;
     align-items: center;
-}
-
-.footer-text {
-    font-weight: 400;
-}
-
-.footer-center {
-    gap: 15px;
-}
-
-.footer-link {
-    color: #E2DCD2;
-    text-decoration: none;
-    font-size: 12px;
-    padding: 2px 6px;
-    border-radius: 4px;
-    transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.footer-link:hover {
-    background-color: #F5C448;
-    color: #125A6C;
-}
-
-.footer-icon {
-    color: #E2DCD2;
-    font-size: 14px;
-    width: 24px;
-    height: 24px;
-    display: flex;
     justify-content: center;
+    border-top: 1px solid var(--border-blue);
+}
+
+.footer-content {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.1);
-    transition: background-color 0.2s ease, transform 0.2s ease;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0 2rem;
 }
 
-.footer-icon:hover {
-    background-color: #F5C448;
-    color: #125A6C;
-    transform: scale(1.1);
+.footer-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+    flex-wrap: wrap;
 }
 
-@media (max-width: 600px) {
+.footer-link, .github-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+    padding: 0.5rem;
+}
+
+.github-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--blue-neon);
+}
+
+.footer-link:hover, .github-link:hover {
+    color: var(--text-primary);
+}
+
+.footer-bottom {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.footer-bottom p {
+    margin: 0;
+}
+
+@media (max-width: 768px) {
     .footer {
-        flex-direction: column;
-        height: auto;
-        gap: 5px;
-        padding: 8px 10px;
-        text-align: center;
+        padding: 1rem 0;
     }
-    .footer-center {
-        flex-wrap: wrap;
-        justify-content: center;
+
+    .footer-links {
+        gap: 1.5rem;
+    }
+
+    .footer-content {
+        padding: 0 1rem;
     }
 }
 </style>
