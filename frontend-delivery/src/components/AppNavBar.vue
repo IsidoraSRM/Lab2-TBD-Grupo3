@@ -31,213 +31,141 @@ export default {
 </script>
 
 <template>
-    <nav>
-        <router-link 
-            :to="isLoggedIn && userRole === 'CLIENTE' ? '/homeClient' : '/'" 
-            class="title"
-        >
-            <img src="@/assets/DocDelivery.png" alt="Logo" class="nav-logo">
-            DocDelivery
+  <nav class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-brand">
+        <router-link to="/" class="brand-link">
+          <img src="@/assets/DocDelivery.png" alt="DocDelivery Logo" class="brand-logo">
+          <span class="brand-name">DocDelivery</span>
         </router-link>
-        
-        <div class="menu" @click="toggleMenu">
-            <span></span>
-            <span></span>
-            <span></span>   
+      </div>
+
+      <div class="navbar-menu">
+        <div class="nav-links" :class="{ 'active': isMenuOpen }">
+          <router-link to="/" class="nav-link" exact>Inicio</router-link>
+          <router-link to="/login" class="nav-link">Iniciar Sesión</router-link>
         </div>
-        
-        <ul :class="{ open: menuOpen }">
-            <!-- Opciones para cliente -->
-            <template v-if="isLoggedIn && userRole === 'CLIENTE'">
-                <li>
-                    <router-link to="/homeClient" active-class="active">Inicio</router-link>
-                </li>
-                <li>
-                    <router-link to="/client" active-class="active">Realizar un Pedido</router-link>
-                </li>
-            </template>
-
-            <!-- Opciones para admin -->
-            <li v-if="isLoggedIn && userRole === 'ADMIN'">
-                <router-link to="/admin" active-class="active">Panel Admin</router-link>
-            </li>
-
-            <!-- Opciones para trabajador -->
-            <li v-if="isLoggedIn && userRole === 'TRABAJADOR'">
-                <router-link to="/trabajador" active-class="active">Panel Trabajador</router-link>
-            </li>
-
-            <!-- Menú usuario -->
-            <template v-if="isLoggedIn">
-
-                <li>
-                    <a href="#" @click.prevent="logout">Cerrar Sesión</a>
-                </li>
-            </template>
-
-            
-            <li v-if="!isLoggedIn">
-                <router-link to="/" active-class="active">Inicio</router-link>
-            </li>
-            
-            <li v-if="!isLoggedIn">
-                <router-link to="/login" active-class="active">Iniciar Sesión</router-link>
-            </li>
-
-
-        </ul>
-    </nav>
+      </div>
+    </div>
+  </nav>
 </template>
 
 <style scoped>
-/* Estilos base */
-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: var(--bg-secondary);
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    box-shadow: 0 2px 4px var(--blue-glow);
-    padding: 1rem 1rem;
-    color: var(--text-primary);
-}
-
-.title {
-    font-size: 1.5rem;
-    font-weight: bolder;
-    text-decoration: none;
-    color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.nav-logo {
-    height: 30px;
-    width: auto;
-}
-
-ul {
-    display: flex;
-    gap: 0.5rem;
-    margin: 0;
-    padding-right: 20px;
-    list-style: none;
-}
-
-li a {
-    display: block;
-    text-decoration: none;
-    color: var(--text-secondary);
-    font-weight: bold;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    transition: color 0.3s, background-color 0.3s;
-}
-
-li a:not(.active):hover {
-    color: var(--text-primary);
-    background-color: var(--primary-blue);
-}
-
-/* Menú hamburguesa */
-.menu {
-    display: none;
-    cursor: pointer;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 2.25rem;
-    height: 2rem;
-    position: relative;
-    z-index: 1001;
-}
-
-.menu span {
-    height: 0.4rem;
-    width: 100%;
-    background-color: var(--text-primary);
-    border-radius: 0.2rem;
-    transition: all 0.3s;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .menu {
-        display: flex;
-    }
-    
-    ul {
-        display: none;
-        flex-direction: column;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background-color: var(--bg-secondary);
-        padding: 1rem;
-    }
-    
-    ul.open {
-        display: flex;
-    }
-    
-    li {
-        width: 100%;
-        text-align: center;
-    }
-}
-
 .navbar {
   background-color: var(--bg-secondary);
-  color: var(--text-primary);
-  padding: 1rem;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  box-shadow: 0 2px 4px var(--blue-glow);
+  border-bottom: 1px solid var(--border-blue);
+  height: 70px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  gap: 1rem;
+}
+
+.brand-logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.brand-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+  background: linear-gradient(45deg, var(--text-primary), var(--blue-neon));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.navbar-menu {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
 }
 
 .nav-link {
   color: var(--text-secondary);
   text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
   padding: 0.5rem 1rem;
-  transition: color 0.3s, background-color 0.3s;
-  border-radius: 4px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background-color: var(--primary-blue);
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.router-link-active::after {
+  width: 80%;
 }
 
 .nav-link:hover,
-.nav-link.active {
-  color: var(--text-primary);
-  background-color: var(--primary-blue);
-}
-
-.dropdown-menu {
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-blue);
-  box-shadow: 0 4px 6px var(--blue-glow);
-}
-
-.dropdown-item {
-  color: var(--text-secondary);
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.dropdown-item:hover {
-  background-color: var(--primary-blue);
+.nav-link.router-link-active {
   color: var(--text-primary);
 }
 
-.user-info {
-  color: var(--text-primary);
-  background-color: var(--dark-gray);
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  border: 1px solid var(--border-blue);
+@media (max-width: 768px) {
+  .navbar-container {
+    padding: 0 1rem;
+  }
+
+  .brand-name {
+    font-size: 1.25rem;
+  }
+
+  .brand-logo {
+    height: 32px;
+  }
+
+  .nav-links {
+    gap: 1rem;
+  }
+
+  .nav-link {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
 }
 </style>
