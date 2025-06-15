@@ -62,4 +62,11 @@ public class DetallePedidoService {
     public List<Map<String, Object>> getPuntosEntregaMasLejano() {
         return detallePedidoRepository.getPuntosEntregaMasLejano();
     }
+
+
+    //Consulta 1 para obtener los 5 puntos de entrega más cercanos a la empresa "Express Chile"
+    public List<Map<String, Object>> obtenerEntregasCercanasAEmpresa(String nombreEmpresa) {
+        return detallePedidoRepository.obtenerEntregasCercanasAEmpresa(nombreEmpresa);
+    }
+
 }

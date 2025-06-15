@@ -120,5 +120,28 @@ public class DetallePedidoRepository {
         return Collections.emptyList();
     }
 }
-    
+
+
+    // Consulta 1 para obtener los 5 puntos de entrega más cercanos a la empresa "Express Chile"
+    public List<Map<String, Object>> obtenerEntregasCercanasAEmpresa(String nombreEmpresa) {
+        String sql = "SELECT " +
+                "dp.idDetallePedido, " +
+                "ea.nombreEmpresa, " +
+                "dp.direccionDestino, " +
+                "ROUND(ST_Distance(ea.ubicacion::geography, dp.ubicacionDestino::geography)) AS distancia_metros, " +
+                "ST_AsText(ST_MakeLine(ea.ubicacion, dp.ubicacionDestino)) AS ruta_estimada " +
+                "FROM detallepedido dp " +
+                "JOIN servicios s ON dp.idServicio = s.idServicio " +
+                "JOIN empresaasociada ea ON s.idEmpresaAsociada = ea.idEmpresaAsociada " +
+                "WHERE ea.nombreEmpresa ILIKE ? " +
+                "ORDER BY distancia_metros " +
+                "LIMIT 5";
+        try {
+            return jdbcTemplate.queryForList(sql, "%" + nombreEmpresa + "%");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
 }

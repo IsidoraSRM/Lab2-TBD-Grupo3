@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Repository
-public class  ClienteRepository {
+public class  ClienteRepository implements ClienteRepositoryCustom {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -141,5 +141,30 @@ public class  ClienteRepository {
             return Collections.emptyList();
         }
     }
+
+
+    //Consulta 2: Verificar si los clientes están dentro de una zona de cobertura (con buffer de 1km)
+    @Override
+    public List<Map<String, Object>> verificarClientesEnZonas() {
+        String sql = """
+            SELECT 
+                c.cliente_id, 
+                c.nombre, 
+                z.zona_id, 
+                z.nombre AS nombre_zona
+            FROM 
+                cliente c
+            JOIN 
+                zonas_cobertura z
+            ON 
+                ST_Intersects(
+                    ST_Buffer(c.ubicacion::geography, 1000)::geometry,
+                    z.geom
+                )
+        """;
+
+        return jdbcTemplate.queryForList(sql);
+    }
+
 
 }
