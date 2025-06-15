@@ -86,6 +86,7 @@ public class RepartidorController {
     }
 
     @GetMapping("/distancia-ultimo-mes")
+    @Secured({"ROLE_ADMIN", "ROLE_TRABAJADOR"})
     public ResponseEntity<List<RepartidorDistanciaDTO>> getDistanciasRecorridas() {
         List<RepartidorDistanciaDTO> distancias = repartidorService.obtenerDistanciasUltimoMes();
         return ResponseEntity.ok(distancias);

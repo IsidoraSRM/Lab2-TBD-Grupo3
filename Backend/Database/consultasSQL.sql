@@ -58,16 +58,4 @@ GROUP BY
 
 
 -- consulta numero 4
-SELECT repartidor.nombre AS nombre_repartidor,                       -- Selecciona el nombre del repartidor
-       ROUND(                                                        -- Redondea el resultado del promedio a un número entero
-         AVG(                                                        -- Calcula el promedio de:
-           EXTRACT(EPOCH FROM (OrderEntity.fechaEntrega - OrderEntity.fechaPedido)) / 60  -- Extrae la diferencia de tiempo entre la fecha de entrega y la de pedido en segundos, y lo convierte a minutos
-         )
-       ) AS tiempo_promedio_minutos
-FROM OrderEntity                                                     -- Desde la tabla de pedidos
-JOIN repartidor                                                      -- Une con la tabla Repartidor usando la clave foránea correspondiente
-  ON OrderEntity.repartidor_id = repartidor.repartidor_id
-WHERE OrderEntity.fechaEntrega IS NOT NULL                           -- Asegura que ambos timestamps existan (evita errores por NULL)
-  AND OrderEntity.fechaPedido IS NOT NULL
-GROUP BY repartidor.nombre
-ORDER BY tiempo_promedio_minutos;
+

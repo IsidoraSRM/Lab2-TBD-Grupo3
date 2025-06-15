@@ -30,5 +30,5 @@ $$ LANGUAGE plpgsql;
 
 
 
-SELECT calcular_zona_cliente(7);
+-- SELECT calcular_zona_cliente(7);
 

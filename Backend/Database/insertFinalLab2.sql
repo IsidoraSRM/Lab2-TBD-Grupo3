@@ -251,6 +251,9 @@ VALUES
   (6, 8, 8, '2024-06-04 12:45:00', '2024-06-07 10:00:00', 'PENDIENTE', 'ALTA',
      ST_SetSRID(ST_MakeLine(ST_MakePoint(-70.7100, -33.5100), ST_MakePoint(-70.7150, -33.5150)), 4326));
 
+
+
+
  -------------------------------
 -- Insertar registros en la tabla Servicios
 -------------------------------
@@ -281,6 +284,71 @@ INSERT INTO Servicios (idEmpresaAsociada, nombreServicio, descripcionServicio, p
 (8, 'Factura Original Timbrada', 'Con código SII y folio autorizado', 2990, 'Tributario', 500),
 (9, 'Declaración Jurada de IVA', 'Formulario físico para presentación manual', 1990, 'Tributario', 300),
 (10, 'Certificado de Deuda Tributaria', 'Estado actualizado de obligaciones con SII', 5990, 'Tributario', 120);
+
+
+
+INSERT INTO DetallePedido
+(idPedido, idServicio, cantidad, direccionDestino, direccionInicio, ubicacionInicio, ubicacionDestino)
+VALUES
+    (1, 1, 2,
+     'Calle Destino 101, Santiago',
+     'Av. Inicio 123, Santiago',
+     ST_SetSRID(ST_MakePoint(-70.6410, -33.4410), 4326),
+     ST_SetSRID(ST_MakePoint(-70.6450, -33.4450), 4326)),
+
+    (5, 2, 1,
+     'Calle Destino 202, Valparaíso',
+     'Av. Inicio 456, Valparaíso',
+     ST_SetSRID(ST_MakePoint(-70.6610, -33.4610), 4326),
+     ST_SetSRID(ST_MakePoint(-70.6650, -33.4650), 4326)),
+
+    (7, 3, 3,
+     'Calle Destino 303, Providencia',
+     'Av. Inicio 789, Providencia',
+     ST_SetSRID(ST_MakePoint(-70.6710, -33.4710), 4326),
+     ST_SetSRID(ST_MakePoint(-70.6750, -33.4750), 4326)),
+
+    (3, 4, 1,
+     'Calle Destino 404, Concepción',
+     'Av. Inicio 101, Concepción',
+     ST_SetSRID(ST_MakePoint(-70.6810, -33.4610), 4326),
+     ST_SetSRID(ST_MakePoint(-70.6850, -33.4650), 4326)),
+
+    (10, 5, 2,
+     'Calle Destino 505, La Serena',
+     'Av. Inicio 202, La Serena',
+     ST_SetSRID(ST_MakePoint(-70.6910, -33.4410), 4326),
+     ST_SetSRID(ST_MakePoint(-70.6950, -33.4450), 4326)),
+
+    (2, 6, 1,
+     'Calle Destino 606, Iquique',
+     'Av. Inicio 303, Iquique',
+     ST_SetSRID(ST_MakePoint(-70.7010, -33.4310), 4326),
+     ST_SetSRID(ST_MakePoint(-70.7050, -33.4350), 4326)),
+
+    (8, 7, 2,
+     'Calle Destino 707, Temuco',
+     'Av. Inicio 404, Temuco',
+     ST_SetSRID(ST_MakePoint(-70.7110, -33.4210), 4326),
+     ST_SetSRID(ST_MakePoint(-70.7150, -33.4250), 4326)),
+
+    (4, 8, 3,
+     'Calle Destino 808, Punta Arenas',
+     'Av. Inicio 505, Punta Arenas',
+     ST_SetSRID(ST_MakePoint(-70.7210, -33.4110), 4326),
+     ST_SetSRID(ST_MakePoint(-70.7250, -33.4150), 4326)),
+
+    (6, 9, 2,
+     'Calle Destino 909, Viña del Mar',
+     'Av. Inicio 606, Viña del Mar',
+     ST_SetSRID(ST_MakePoint(-70.7310, -33.4010), 4326),
+     ST_SetSRID(ST_MakePoint(-70.7350, -33.4050), 4326)),
+
+    (9, 10, 1,
+     'Calle Destino 1010, Puerto Montt',
+     'Av. Inicio 707, Puerto Montt',
+     ST_SetSRID(ST_MakePoint(-70.7410, -33.3910), 4326),
+     ST_SetSRID(ST_MakePoint(-70.7450, -33.3950), 4326));
 
 -------------------------------
 -- Insertar registros en la tabla MedioDePago

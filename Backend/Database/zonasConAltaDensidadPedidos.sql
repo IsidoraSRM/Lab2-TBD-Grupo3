@@ -31,3 +31,7 @@ FROM cluster_stats cs
 LEFT JOIN public.zonas_cobertura z
   ON ST_Within(cs.centro_cluster, z.geom)  -- o ST_Intersects si prefieres
 ORDER BY cs.cantidad_pedidos DESC;
+
+
+
+

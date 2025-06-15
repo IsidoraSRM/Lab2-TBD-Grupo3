@@ -100,11 +100,11 @@ public class DetallePedidoRepository {
         JOIN EmpresaAsociada e ON o.idEmpresaAsociada = e.idEmpresaAsociada
         WHERE ST_Distance(
             ST_Transform(e.ubicacion, 3857),
-            ST_Transform(d.ubicacion, 3857)
+            ST_Transform(d.ubicacionDestino, 3857)
         ) = (
             SELECT MAX(ST_Distance(
                 ST_Transform(e2.ubicacion, 3857),
-                ST_Transform(d2.ubicacion, 3857)
+                ST_Transform(d2.ubicacionDestino, 3857)
             ))
             FROM DetallePedido d2
             JOIN OrderEntity o2 ON d2.idPedido = o2.idPedido
