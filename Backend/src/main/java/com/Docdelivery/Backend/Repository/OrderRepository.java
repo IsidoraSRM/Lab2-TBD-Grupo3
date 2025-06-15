@@ -1,7 +1,15 @@
 package com.Docdelivery.Backend.Repository;
 
 import com.Docdelivery.Backend.Entity.OrderEntity;
+import com.Docdelivery.Backend.dto.ClusterZoneDto;
+
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.io.WKTReader;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKBReader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -266,6 +274,67 @@ public class OrderRepository {
             e.printStackTrace();
             return Collections.emptyList();
         }
+    }
+
+
+    // --------------------------------EXTRAS-----------------------------
+
+    // EXTRA 1 : Implementar una función que calcule automáticamente la zona a la que pertenece un cliente.
+    public String calcularZonaCliente(int clienteId) {
+        String sql = "SELECT calcular_zona_cliente(?)";
+        return jdbcTemplate.queryForObject(
+          sql,
+          new Object[]{clienteId},
+          String.class
+        );
+    }
+
+
+    // EXTRA 2 : Detectar zonas con alta densidad de pedidos mediante agregación de puntos.
+    public List<ClusterZoneDto> findHighDensityZones() {
+        String sql = """
+            WITH order_points AS (
+            SELECT c.ubicacion AS punto
+            FROM cliente c
+            JOIN OrderEntity o ON c.cliente_id = o.cliente_id
+            ),
+            clusters AS (
+            SELECT
+                ST_ClusterDBSCAN(punto, 0.005, 2) OVER () AS cluster_id,
+                punto
+            FROM order_points
+            ),
+            cluster_stats AS (
+            SELECT
+                cluster_id,
+                COUNT(*)                       AS cantidad_pedidos,
+                ST_Centroid(ST_Collect(punto)) AS centro_cluster,
+                ST_Collect(punto)              AS geom_cluster
+            FROM clusters
+            WHERE cluster_id >= 0
+            GROUP BY cluster_id
+            )
+            SELECT
+            cs.cluster_id,
+            z.nombre                 AS zona_cobertura,
+            cs.cantidad_pedidos,
+            ST_AsText(cs.centro_cluster)     AS centro_wkt,
+            ST_AsGeoJSON(cs.geom_cluster)    AS geom_geojson
+            FROM cluster_stats cs
+            LEFT JOIN public.zonas_cobertura z
+            ON ST_Within(cs.centro_cluster, z.geom)
+            ORDER BY cs.cantidad_pedidos DESC;
+        """;
+
+        return jdbcTemplate.query(sql, (rs, i) ->
+        new ClusterZoneDto(
+            rs.getInt("cluster_id"),
+            rs.getString("zona_cobertura"),
+            rs.getInt("cantidad_pedidos"),
+            rs.getString("centro_wkt"),
+            rs.getString("geom_geojson")
+        )
+        );
     }
 
 }

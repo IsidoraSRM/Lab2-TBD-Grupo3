@@ -18,6 +18,7 @@ import com.Docdelivery.Backend.Entity.RepartidorEntity;
 import com.Docdelivery.Backend.Repository.DetallePedidoRepository;
 import com.Docdelivery.Backend.Repository.OrderRepository;
 import com.Docdelivery.Backend.Repository.RepartidorRepository;
+import com.Docdelivery.Backend.dto.ClusterZoneDto;
 import com.Docdelivery.Backend.dto.CrearPedidoDto;
 
 @Service
@@ -126,5 +127,18 @@ public class OrderService {
     // Consulta 5: Listar todos los pedidos cuya ruta estimada cruce más de 2 zonas de reparto.
     public List<Map<String, Object>> getPedidosConClienteYDetalleByRutaEstimadaCruce2Zonas() {
         return orderRepository.getPedidosConClienteYDetalleByRutaEstimadaCruce2Zonas();
+    }
+
+
+    // --------------------------------EXTRAS-----------------------------
+
+    // EXTRA 1 : Implementar una función que calcule automáticamente la zona a la que pertenece un cliente.
+    public String getZoneForClient(int clienteId) {
+        return orderRepository.calcularZonaCliente(clienteId);
+    }
+    // EXTRA 2 : Detectar zonas con alta densidad de pedidos mediante agregación de puntos.
+     
+    public List<ClusterZoneDto> getHighDensityZones() {
+        return orderRepository.findHighDensityZones();
     }
 }

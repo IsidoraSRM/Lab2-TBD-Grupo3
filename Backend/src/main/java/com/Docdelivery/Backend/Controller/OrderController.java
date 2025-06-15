@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import com.Docdelivery.Backend.Entity.DetallePedidoEntity;
 import com.Docdelivery.Backend.Entity.OrderEntity;
 import com.Docdelivery.Backend.Service.OrderService;
+import com.Docdelivery.Backend.dto.ClusterZoneDto;
 import com.Docdelivery.Backend.dto.CrearPedidoDto;
 import java.util.Collections;
 
@@ -208,5 +209,21 @@ public class OrderController {
     public ResponseEntity<List<Map<String, Object>>> getPedidosConRutaCruce2Zonas() {
         List<Map<String, Object>> pedidos = orderService.getPedidosConClienteYDetalleByRutaEstimadaCruce2Zonas();
         return ResponseEntity.ok(pedidos);
+    }
+
+
+    // --------------------------------EXTRAS-----------------------------
+
+    // EXTRA 1 : Implementar una función que calcule automáticamente la zona a la que pertenece un cliente.
+    @GetMapping("/extra1/{id}")
+    public ResponseEntity<String> obtenerZonaCliente(@PathVariable("id") int clienteId) {
+        String zona = orderService.getZoneForClient(clienteId);
+        return ResponseEntity.ok(zona);
+    }
+    // EXTRA 2 : Detectar zonas con alta densidad de pedidos mediante agregación de puntos.
+    @GetMapping("/extra2")
+    @Secured({"ROLE_CLIENTE", "ROLE_ADMIN", "ROLE_TRABAJADOR"})
+    public List<ClusterZoneDto> highDensityZones() {
+        return orderService.getHighDensityZones();
     }
 }
