@@ -208,51 +208,127 @@ INSERT INTO empresaasociada (nombreEmpresa, direccionEmpresa, tipoServicio, ubic
  -------------------------------
 -- Insertar registros en la tabla OrderEntity (incluye ruta_estimada como LineString)
 -------------------------------
-INSERT INTO OrderEntity
-    (cliente_id, idEmpresaAsociada, repartidor_id, fechaPedido, fechaEntrega, estadoPedido, prioridadPedido, ruta_estimada) 
+INSERT INTO orderentity
+(cliente_id, idEmpresaAsociada, repartidor_id, fechaPedido, fechaEntrega, estadoPedido, prioridadPedido, ruta_estimada)
 VALUES
-  (1, 3, 1, '2024-06-01 08:00:00', '2024-06-01 13:00:00', 'ENTREGADO', 'URGENTE',
-     ST_SetSRID(ST_MakeLine(ST_MakePoint(-70.6400, -33.4400), ST_MakePoint(-70.6450, -33.4450)), 4326)),
-  (5, 2, 3, '2024-06-01 09:30:00', '2024-06-01 17:00:00', 'CANCELADO', 'URGENTE',
-     ST_SetSRID(ST_MakeLine(ST_MakePoint(-70.6500, -33.4500), ST_MakePoint(-70.6550, -33.4550)), 4326)),
-  (7, 5, 2, '2024-06-01 10:15:00', '2024-06-02 12:00:00', 'PENDIENTE', 'URGENTE',
-     ST_SetSRID(ST_MakeLine(ST_MakePoint(-70.6600, -33.4600), ST_MakePoint(-70.6650, -33.4650)), 4326)),
-  (3, 1, 5, '2024-06-01 11:45:00', '2024-06-01 16:30:00', 'ENTREGADO', 'URGENTE',
-     ST_SetSRID(ST_MakeLine(ST_MakePoint(-70.6700, -33.4700), ST_MakePoint(-70.6750, -33.4750)), 4326)),
-  (10, 4, 4, '2024-06-01 14:00:00', '2024-06-02 09:00:00', 'PENDIENTE', 'URGENTE',
-     ST_SetSRID(ST_MakeLine(ST_MakePoint(-70.6800, -33.4800), ST_MakePoint(-70.6850, -33.4850)), 4326)),
+    -- Registro modificado: la ruta incluye tres puntos para simular atravesar 3 zonas
+    (1, 3, 1, '2025-05-01 08:00:00', '2025-05-01 13:00:00', 'ENTREGADO', 'URGENTE',
+     ST_SetSRID(ST_MakeLine(
+                        ST_MakePoint(-70.6400, -33.4400),  -- Punto en zona 1
+                        ST_MakePoint(-70.6700, -33.4450),  -- Punto intermedio en zona 2
+                        ST_MakePoint(-70.6450, -33.4450)   -- Punto final en zona 3
+                ), 4326)),
 
-  (2, 4, 6, '2024-06-02 08:20:00', '2024-06-02 14:15:00', 'ENTREGADO', 'ALTA',
-     ST_SetSRID(ST_MakeLine(ST_MakePoint(-70.6900, -33.4900), ST_MakePoint(-70.6950, -33.4950)), 4326)),
-  (8, 6, 7, '2024-06-02 10:00:00', '2024-06-03 11:00:00', 'PENDIENTE', 'ALTA',
-     ST_SetSRID(ST_MakeLine(ST_MakePoint(-70.7000, -33.5000), ST_MakePoint(-70.7050, -33.5050)), 4326)),
-  (4, 8, 8, '2024-06-02 12:30:00', '2024-06-04 10:00:00', 'CANCELADO', 'ALTA',
-     ST_SetSRID(ST_MakeLine(ST_MakePoint(-70.7100, -33.5100), ST_MakePoint(-70.7150, -33.5150)), 4326)),
-  (6, 7, 9, '2024-06-02 15:45:00', '2024-06-03 16:00:00', 'ENTREGADO', 'ALTA',
-     ST_SetSRID(ST_MakeLine(ST_MakePoint(-70.7200, -33.5200), ST_MakePoint(-70.7250, -33.5250)), 4326)),
-  (9, 10, 10, '2024-06-02 17:00:00', '2024-06-03 12:30:00', 'PENDIENTE', 'ALTA',
-     ST_SetSRID(ST_MakeLine(ST_MakePoint(-70.7300, -33.5300), ST_MakePoint(-70.7350, -33.5350)), 4326)),
+    -- Registro modificado: ruta con tres puntos
+    (7, 5, 2, '2025-05-03 10:15:00', '2025-05-04 12:00:00', 'PENDIENTE', 'URGENTE',
+     ST_SetSRID(ST_MakeLine(
+                        ST_MakePoint(-70.6600, -33.4600), -- Inicio en zona 1
+                        ST_MakePoint(-70.6900, -33.4650), -- Intermedio en zona 2
+                        ST_MakePoint(-70.6650, -33.4650)  -- Final en zona 3
+                ), 4326)),
 
-  (1, 5, 1, '2024-06-03 07:30:00', '2024-06-03 12:45:00', 'ENTREGADO', 'URGENTE',
-     ST_SetSRID(ST_MakeLine(ST_MakePoint(-70.6400, -33.4400), ST_MakePoint(-70.6450, -33.4450)), 4326)),
-  (3, 2, 3, '2024-06-03 09:00:00', '2024-06-03 15:20:00', 'CANCELADO', 'URGENTE',
-     ST_SetSRID(ST_MakeLine(ST_MakePoint(-70.6500, -33.4500), ST_MakePoint(-70.6550, -33.4550)), 4326)),
-  (7, 3, 2, '2024-06-03 11:00:00', '2024-06-05 10:00:00', 'PENDIENTE', 'URGENTE',
-     ST_SetSRID(ST_MakeLine(ST_MakePoint(-70.6600, -33.4600), ST_MakePoint(-70.6650, -33.4650)), 4326)),
-  (5, 9, 5, '2024-06-03 13:15:00', '2024-06-04 09:30:00', 'ENTREGADO', 'URGENTE',
-     ST_SetSRID(ST_MakeLine(ST_MakePoint(-70.6700, -33.4700), ST_MakePoint(-70.6750, -33.4750)), 4326)),
-  (10, 5, 4, '2024-06-03 16:00:00', '2024-06-04 11:00:00', 'PENDIENTE', 'URGENTE',
-     ST_SetSRID(ST_MakeLine(ST_MakePoint(-70.6800, -33.4800), ST_MakePoint(-70.6850, -33.4850)), 4326)),
+    -- Otro registro modificado
+    (3, 1, 5, '2025-05-04 11:45:00', '2025-05-04 16:30:00', 'ENTREGADO', 'URGENTE',
+     ST_SetSRID(ST_MakeLine(
+                        ST_MakePoint(-70.6700, -33.4700), -- Inicio en zona 1
+                        ST_MakePoint(-70.7000, -33.4750), -- Intermedio en zona 2
+                        ST_MakePoint(-70.6750, -33.4750)  -- Final en zona 3
+                ), 4326)),
 
-  (2, 8, 6, '2024-06-04 08:00:00', '2024-06-06 17:00:00', 'PENDIENTE', 'ALTA',
-     ST_SetSRID(ST_MakeLine(ST_MakePoint(-70.6900, -33.4900), ST_MakePoint(-70.6950, -33.4950)), 4326)),
-  (4, 1, 7, '2024-06-04 10:30:00', '2024-06-05 14:00:00', 'ENTREGADO', 'ALTA',
-     ST_SetSRID(ST_MakeLine(ST_MakePoint(-70.7000, -33.5000), ST_MakePoint(-70.7050, -33.5050)), 4326)),
-  (6, 8, 8, '2024-06-04 12:45:00', '2024-06-07 10:00:00', 'PENDIENTE', 'ALTA',
-     ST_SetSRID(ST_MakeLine(ST_MakePoint(-70.7100, -33.5100), ST_MakePoint(-70.7150, -33.5150)), 4326));
+    -- Los demás registros quedan igual que en el insert anterior (con rutas de dos puntos)
+    (10, 4, 4, '2025-05-05 14:00:00', '2025-05-06 09:00:00', 'PENDIENTE', 'URGENTE',
+     ST_SetSRID(ST_MakeLine(
+                        ST_MakePoint(-70.6800, -33.4800),
+                        ST_MakePoint(-70.6850, -33.4850)
+                ), 4326)),
 
+    (2, 4, 6, '2025-05-06 08:20:00', '2025-05-06 14:15:00', 'ENTREGADO', 'ALTA',
+     ST_SetSRID(ST_MakeLine(
+                        ST_MakePoint(-70.6900, -33.4900),
+                        ST_MakePoint(-70.6950, -33.4950)
+                ), 4326)),
 
+    (8, 6, 7, '2025-05-07 10:00:00', '2025-05-08 11:00:00', 'PENDIENTE', 'ALTA',
+     ST_SetSRID(ST_MakeLine(
+                        ST_MakePoint(-70.7000, -33.5000),
+                        ST_MakePoint(-70.7050, -33.5050)
+                ), 4326)),
 
+    (4, 8, 8, '2025-05-08 12:30:00', '2025-05-10 10:00:00', 'CANCELADO', 'ALTA',
+     ST_SetSRID(ST_MakeLine(
+                        ST_MakePoint(-70.7100, -33.5100),
+                        ST_MakePoint(-70.7150, -33.5150)
+                ), 4326)),
+
+    (6, 7, 9, '2025-05-09 15:45:00', '2025-05-10 16:00:00', 'ENTREGADO', 'ALTA',
+     ST_SetSRID(ST_MakeLine(
+                        ST_MakePoint(-70.7200, -33.5200),
+                        ST_MakePoint(-70.7250, -33.5250)
+                ), 4326)),
+
+    (9, 10, 10, '2025-05-10 17:00:00', '2025-05-11 12:30:00', 'PENDIENTE', 'ALTA',
+     ST_SetSRID(ST_MakeLine(
+                        ST_MakePoint(-70.7300, -33.5300),
+                        ST_MakePoint(-70.7350, -33.5350)
+                ), 4326)),
+
+    (1, 5, 1, '2025-05-11 07:30:00', '2025-05-11 12:45:00', 'ENTREGADO', 'URGENTE',
+     ST_SetSRID(ST_MakeLine(
+                        ST_MakePoint(-70.6400, -33.4400),
+                        ST_MakePoint(-70.6450, -33.4450)
+                ), 4326)),
+
+    (3, 2, 3, '2025-05-12 09:00:00', '2025-05-12 15:20:00', 'CANCELADO', 'URGENTE',
+     ST_SetSRID(ST_MakeLine(
+                        ST_MakePoint(-70.6500, -33.4500),
+                        ST_MakePoint(-70.6550, -33.4550)
+                ), 4326)),
+
+    (7, 3, 2, '2025-05-13 11:00:00', '2025-05-15 10:00:00', 'PENDIENTE', 'URGENTE',
+     ST_SetSRID(ST_MakeLine(
+                        ST_MakePoint(-70.6600, -33.4600),
+                        ST_MakePoint(-70.6650, -33.4650)
+                ), 4326)),
+
+    (5, 9, 5, '2025-05-14 13:15:00', '2025-05-15 09:30:00', 'ENTREGADO', 'URGENTE',
+     ST_SetSRID(ST_MakeLine(
+                        ST_MakePoint(-70.6700, -33.4700),
+                        ST_MakePoint(-70.6750, -33.4750)
+                ), 4326)),
+
+    (10, 5, 4, '2025-05-15 16:00:00', '2025-05-16 11:00:00', 'PENDIENTE', 'URGENTE',
+     ST_SetSRID(ST_MakeLine(
+                        ST_MakePoint(-70.6800, -33.4800),
+                        ST_MakePoint(-70.6850, -33.4850)
+                ), 4326)),
+
+    (2, 8, 6, '2025-05-16 08:00:00', '2025-05-18 17:00:00', 'PENDIENTE', 'ALTA',
+     ST_SetSRID(ST_MakeLine(
+                        ST_MakePoint(-70.6900, -33.4900),
+                        ST_MakePoint(-70.6950, -33.4950)
+                ), 4326)),
+
+    (4, 1, 7, '2025-05-18 10:30:00', '2025-05-19 14:00:00', 'ENTREGADO', 'ALTA',
+     ST_SetSRID(ST_MakeLine(
+                        ST_MakePoint(-70.7000, -33.5000),
+                        ST_MakePoint(-70.7050, -33.5050)
+                ), 4326)),
+
+    (1, 3, 1,
+     '2025-05-01 08:00:00', '2025-05-01 13:00:00',
+     'PENDIENTE', 'ALTA',
+     ST_SetSRID(ST_MakeLine(ARRAY[
+                                ST_MakePoint(-70.7400, -33.4200), -- Ubicado en Zona Central Noroeste
+                            ST_MakePoint(-70.6800, -33.4200), -- Ubicado en Zona Central Nordeste
+                            ST_MakePoint(-70.6800, -33.4500)  -- Ubicado en Zona Central Sureste
+                                ]), 4326)
+    ),
+
+    (6, 8, 8, '2025-05-19 12:45:00', '2025-05-20 10:00:00', 'PENDIENTE', 'ALTA',
+     ST_SetSRID(ST_MakeLine(
+                        ST_MakePoint(-70.7100, -33.5100),
+                        ST_MakePoint(-70.7150, -33.5150)
+                ), 4326));
 
  -------------------------------
 -- Insertar registros en la tabla Servicios
@@ -426,3 +502,155 @@ VALUES (
     4326
   )
 );
+
+-- Región 1: Arica y Parinacota
+INSERT INTO zonas_cobertura (nombre, geom)
+VALUES
+    ('Arica y Parinacota',
+     ST_GeomFromText(
+             'MULTIPOLYGON(((-70.8 -17.8, -69.5 -17.8, -69.5 -19.0, -70.8 -19.0, -70.8 -17.8)))',
+             4326
+     )
+    );
+
+-- Región 2: Tarapacá
+INSERT INTO zonas_cobertura (nombre, geom)
+VALUES
+    ('Tarapacá',
+     ST_GeomFromText(
+             'MULTIPOLYGON(((-70.0 -19.0, -68.0 -19.0, -68.0 -20.5, -70.0 -20.5, -70.0 -19.0)))',
+             4326
+     )
+    );
+
+-- Región 3: Antofagasta
+INSERT INTO zonas_cobertura (nombre, geom)
+VALUES
+    ('Antofagasta',
+     ST_GeomFromText(
+             'MULTIPOLYGON(((-71.0 -21.0, -69.5 -21.0, -69.5 -23.0, -71.0 -23.0, -71.0 -21.0)))',
+             4326
+     )
+    );
+
+-- Región 4: Atacama
+INSERT INTO zonas_cobertura (nombre, geom)
+VALUES
+    ('Atacama',
+     ST_GeomFromText(
+             'MULTIPOLYGON(((-70.5 -25.0, -69.0 -25.0, -69.0 -26.5, -70.5 -26.5, -70.5 -25.0)))',
+             4326
+     )
+    );
+
+-- Región 5: Coquimbo
+INSERT INTO zonas_cobertura (nombre, geom)
+VALUES
+    ('Coquimbo',
+     ST_GeomFromText(
+             'MULTIPOLYGON(((-71.0 -26.5, -70.0 -26.5, -70.0 -28.0, -71.0 -28.0, -71.0 -26.5)))',
+             4326
+     )
+    );
+
+-- Región 6: Valparaíso
+INSERT INTO zonas_cobertura (nombre, geom)
+VALUES
+    ('Valparaíso',
+     ST_GeomFromText(
+             'MULTIPOLYGON(((-71.8 -32.0, -70.3 -32.0, -70.3 -34.0, -71.8 -34.0, -71.8 -32.0)))',
+             4326
+     )
+    );
+
+
+
+-- Región 8: O’Higgins
+INSERT INTO zonas_cobertura (nombre, geom)
+VALUES
+    ('O’Higgins',
+     ST_GeomFromText(
+             'MULTIPOLYGON(((-71.0 -33.7, -70.5 -33.7, -70.5 -35.0, -71.0 -35.0, -71.0 -33.7)))',
+             4326
+     )
+    );
+
+-- Región 9: Maule
+INSERT INTO zonas_cobertura (nombre, geom)
+VALUES
+    ('Maule',
+     ST_GeomFromText(
+             'MULTIPOLYGON(((-71.0 -34.0, -70.0 -34.0, -70.0 -35.5, -71.0 -35.5, -71.0 -34.0)))',
+             4326
+     )
+    );
+
+-- Región 10: Ñuble
+INSERT INTO zonas_cobertura (nombre, geom)
+VALUES
+    ('Ñuble',
+     ST_GeomFromText(
+             'MULTIPOLYGON(((-71.5 -35.5, -70.5 -35.5, -70.5 -36.2, -71.5 -36.2, -71.5 -35.5)))',
+             4326
+     )
+    );
+
+-- Región 11: Biobío
+INSERT INTO zonas_cobertura (nombre, geom)
+VALUES
+    ('Biobío',
+     ST_GeomFromText(
+             'MULTIPOLYGON(((-73.0 -36.0, -71.5 -36.0, -71.5 -38.0, -73.0 -38.0, -73.0 -36.0)))',
+             4326
+     )
+    );
+
+-- Región 12: La Araucanía
+INSERT INTO zonas_cobertura (nombre, geom)
+VALUES
+    ('La Araucanía',
+     ST_GeomFromText(
+             'MULTIPOLYGON(((-73.0 -38.0, -71.5 -38.0, -71.5 -40.0, -73.0 -40.0, -73.0 -38.0)))',
+             4326
+     )
+    );
+
+-- Región 13: Los Ríos
+INSERT INTO zonas_cobertura (nombre, geom)
+VALUES
+    ('Los Ríos',
+     ST_GeomFromText(
+             'MULTIPOLYGON(((-73.0 -40.0, -71.5 -40.0, -71.5 -41.5, -73.0 -41.5, -73.0 -40.0)))',
+             4326
+     )
+    );
+
+-- Región 14: Los Lagos
+INSERT INTO zonas_cobertura (nombre, geom)
+VALUES
+    ('Los Lagos',
+     ST_GeomFromText(
+             'MULTIPOLYGON(((-75.0 -41.0, -72.0 -41.0, -72.0 -43.0, -75.0 -43.0, -75.0 -41.0)))',
+             4326
+     )
+    );
+
+-- Región 15: Aysén
+INSERT INTO zonas_cobertura (nombre, geom)
+VALUES
+    ('Aysén',
+     ST_GeomFromText(
+             'MULTIPOLYGON(((-74.5 -44.0, -70.5 -44.0, -70.5 -47.0, -74.5 -47.0, -74.5 -44.0)))',
+             4326
+     )
+    );
+
+-- Región 16: Magallanes y de la Antártica Chilena
+INSERT INTO zonas_cobertura (nombre, geom)
+VALUES
+    ('Magallanes y de la Antártica Chilena',
+     ST_GeomFromText(
+             'MULTIPOLYGON(((-75.0 -49.0, -70.0 -49.0, -70.0 -56.0, -75.0 -56.0, -75.0 -49.0)))',
+             4326
+     )
+    );
