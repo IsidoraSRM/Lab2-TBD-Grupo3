@@ -162,7 +162,7 @@ public class  ClienteRepository implements ClienteRepositoryCustom {
                 z.geom
             )
         WHERE 
-            c.cliente_id = 2
+            c.cliente_id = ?
         """;
 
         return jdbcTemplate.queryForList(sql, clienteId);
