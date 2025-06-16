@@ -13,6 +13,13 @@ export default {
     created() {
         this.checkAuthStatus();
     },
+    mounted() {
+        window.addEventListener('storage', this.checkAuthStatus);
+        this.$router.afterEach(this.checkAuthStatus);
+    },
+    beforeUnmount() {
+        window.removeEventListener('storage', this.checkAuthStatus);
+    },
     methods: {
         toggleMenu() {
             this.menuOpen = !this.menuOpen;
@@ -43,7 +50,15 @@ export default {
       <div class="navbar-menu">
         <div class="nav-links" :class="{ 'active': isMenuOpen }">
           <router-link to="/" class="nav-link" exact>Inicio</router-link>
-          <router-link to="/login" class="nav-link">Iniciar Sesión</router-link>
+          <template v-if="isLoggedIn">
+            <router-link v-if="userRole === 'ADMIN'" to="/admin" class="nav-link">Panel Admin</router-link>
+            <router-link v-else-if="userRole === 'CLIENTE'" to="/homeClient" class="nav-link">Panel Cliente</router-link>
+            <router-link v-else-if="userRole === 'TRABAJADOR'" to="/trabajador" class="nav-link">Panel Trabajador</router-link>
+            <button class="nav-link" @click="logout" style="background:none;border:none;cursor:pointer;">Cerrar Sesión</button>
+          </template>
+          <template v-else>
+            <router-link to="/login" class="nav-link">Iniciar Sesión</router-link>
+          </template>
         </div>
       </div>
     </div>

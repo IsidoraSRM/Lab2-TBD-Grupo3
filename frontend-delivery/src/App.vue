@@ -81,6 +81,7 @@ html, body {
   flex: 1 0 auto;
   background-color: var(--bg-primary);
   min-height: calc(100vh - 120px);
+  padding-top: 70px !important; /* Ajuste para el navbar fijo */
 }
 
 .main-content {
