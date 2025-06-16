@@ -69,11 +69,12 @@ public class ClienteController {
     }
 
     // Consulta 2: Verificar si los clientes están dentro de una zona de cobertura (con buffer de 1km)
-    @GetMapping("/clientes-en-zona")
-    @Secured({"ROLE_CLIENTE", "ROLE_ADMIN", "ROLE_TRABAJADOR"})
-    public ResponseEntity<List<Map<String, Object>>> verificarClientesEnZona() {
-        List<Map<String, Object>> clientesEnZona = clienteServices.verificarClientesEnZonas();
-        return ResponseEntity.ok(clientesEnZona);
+    @GetMapping("/cliente-en-zona/{id}")
+    @Secured({"ROLE_ADMIN", "ROLE_TRABAJADOR", "ROLE_CLIENTE"})
+    public ResponseEntity<List<Map<String, Object>>> verificarClienteEnZona(@PathVariable Long id) {
+        List<Map<String, Object>> resultado = clienteServices.verificarClienteEnZona(id);
+        return ResponseEntity.ok(resultado);
     }
+
 
 }

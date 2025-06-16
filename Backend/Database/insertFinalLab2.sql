@@ -213,7 +213,7 @@ INSERT INTO orderentity
 VALUES
     -- Registro modificado: la ruta incluye tres puntos para simular atravesar 3 zonas
     (1, 3, 1,
-     '2025-05-01 08:00:00', '2025-05-01 13:00:00',
+     '2025-06-01 08:00:00', '2025-06-05 13:00:00',
      'ENTREGADO', 'URGENTE',
      ST_SetSRID(ST_MakeLine(ARRAY[
                                 ST_MakePoint(-70.6400, -33.4400),  -- Punto en zona 1
@@ -223,7 +223,7 @@ VALUES
 
     -- Registro modificado: ruta con tres puntos
     (7, 5, 2,
-     '2025-05-03 10:15:00', '2025-05-04 12:00:00',
+     '2025-06-03 10:15:00', '2025-06-07 12:00:00',
      'PENDIENTE', 'URGENTE',
      ST_SetSRID(ST_MakeLine(ARRAY[
                                 ST_MakePoint(-70.6600, -33.4600), -- Inicio en zona 1
@@ -231,9 +231,9 @@ VALUES
                             ST_MakePoint(-70.6650, -33.4650)  -- Final en zona 3
                                 ]), 4326)),
 
-    -- Otro registro modificado: la ruta incluye tres puntos
+    -- Registro modificado: la ruta incluye tres puntos
     (3, 1, 5,
-     '2025-05-04 11:45:00', '2025-05-04 16:30:00',
+     '2025-06-04 11:45:00', '2025-06-08 16:30:00',
      'ENTREGADO', 'URGENTE',
      ST_SetSRID(ST_MakeLine(ARRAY[
                                 ST_MakePoint(-70.6700, -33.4700), -- Inicio en zona 1
@@ -241,9 +241,9 @@ VALUES
                             ST_MakePoint(-70.6750, -33.4750)  -- Final en zona 3
                                 ]), 4326)),
 
-    -- Los demás registros quedan igual que en el insert anterior (con rutas de dos puntos)
+    -- Registros con rutas de dos puntos:
     (10, 4, 4,
-     '2025-05-05 14:00:00', '2025-05-06 09:00:00',
+     '2025-06-05 14:00:00', '2025-06-09 09:00:00',
      'PENDIENTE', 'URGENTE',
      ST_SetSRID(ST_MakeLine(
                         ST_MakePoint(-70.6800, -33.4800),
@@ -251,7 +251,7 @@ VALUES
                 ), 4326)),
 
     (2, 4, 6,
-     '2025-05-06 08:20:00', '2025-05-06 14:15:00',
+     '2025-06-06 08:20:00', '2025-06-10 14:15:00',
      'ENTREGADO', 'ALTA',
      ST_SetSRID(ST_MakeLine(
                         ST_MakePoint(-70.6900, -33.4900),
@@ -259,7 +259,7 @@ VALUES
                 ), 4326)),
 
     (8, 6, 7,
-     '2025-05-07 10:00:00', '2025-05-08 11:00:00',
+     '2025-06-07 10:00:00', '2025-06-11 11:00:00',
      'PENDIENTE', 'ALTA',
      ST_SetSRID(ST_MakeLine(
                         ST_MakePoint(-70.7000, -33.5000),
@@ -267,7 +267,7 @@ VALUES
                 ), 4326)),
 
     (4, 8, 8,
-     '2025-05-08 12:30:00', '2025-05-10 10:00:00',
+     '2025-06-08 12:30:00', '2025-06-12 10:00:00',
      'CANCELADO', 'ALTA',
      ST_SetSRID(ST_MakeLine(
                         ST_MakePoint(-70.7100, -33.5100),
@@ -275,7 +275,7 @@ VALUES
                 ), 4326)),
 
     (6, 7, 9,
-     '2025-05-09 15:45:00', '2025-05-10 16:00:00',
+     '2025-06-09 15:45:00', '2025-06-13 16:00:00',
      'ENTREGADO', 'ALTA',
      ST_SetSRID(ST_MakeLine(
                         ST_MakePoint(-70.7200, -33.5200),
@@ -283,7 +283,7 @@ VALUES
                 ), 4326)),
 
     (9, 10, 10,
-     '2025-05-10 17:00:00', '2025-05-11 12:30:00',
+     '2025-06-10 17:00:00', '2025-06-14 12:30:00',
      'PENDIENTE', 'ALTA',
      ST_SetSRID(ST_MakeLine(
                         ST_MakePoint(-70.7300, -33.5300),
@@ -291,7 +291,7 @@ VALUES
                 ), 4326)),
 
     (1, 5, 1,
-     '2025-05-11 07:30:00', '2025-05-11 12:45:00',
+     '2025-06-11 07:30:00', '2025-06-14 12:45:00',
      'ENTREGADO', 'URGENTE',
      ST_SetSRID(ST_MakeLine(
                         ST_MakePoint(-70.6400, -33.4400),
@@ -299,7 +299,7 @@ VALUES
                 ), 4326)),
 
     (3, 2, 3,
-     '2025-05-12 09:00:00', '2025-05-12 15:20:00',
+     '2025-06-12 09:00:00', '2025-06-15 15:20:00',
      'CANCELADO', 'URGENTE',
      ST_SetSRID(ST_MakeLine(
                         ST_MakePoint(-70.6500, -33.4500),
@@ -307,7 +307,7 @@ VALUES
                 ), 4326)),
 
     (7, 3, 2,
-     '2025-05-13 11:00:00', '2025-05-15 10:00:00',
+     '2025-06-13 11:00:00', '2025-06-16 10:00:00',
      'PENDIENTE', 'URGENTE',
      ST_SetSRID(ST_MakeLine(
                         ST_MakePoint(-70.6600, -33.4600),
@@ -315,7 +315,7 @@ VALUES
                 ), 4326)),
 
     (5, 9, 5,
-     '2025-05-14 13:15:00', '2025-05-15 09:30:00',
+     '2025-06-14 13:15:00', '2025-06-17 09:30:00',
      'ENTREGADO', 'URGENTE',
      ST_SetSRID(ST_MakeLine(
                         ST_MakePoint(-70.6700, -33.4700),
@@ -323,7 +323,7 @@ VALUES
                 ), 4326)),
 
     (10, 5, 4,
-     '2025-05-15 16:00:00', '2025-05-16 11:00:00',
+     '2025-06-15 16:00:00', '2025-06-18 11:00:00',
      'PENDIENTE', 'URGENTE',
      ST_SetSRID(ST_MakeLine(
                         ST_MakePoint(-70.6800, -33.4800),
@@ -331,7 +331,7 @@ VALUES
                 ), 4326)),
 
     (2, 8, 6,
-     '2025-05-16 08:00:00', '2025-05-18 17:00:00',
+     '2025-06-16 08:00:00', '2025-06-19 17:00:00',
      'PENDIENTE', 'ALTA',
      ST_SetSRID(ST_MakeLine(
                         ST_MakePoint(-70.6900, -33.4900),
@@ -339,7 +339,7 @@ VALUES
                 ), 4326)),
 
     (4, 1, 7,
-     '2025-05-18 10:30:00', '2025-05-19 14:00:00',
+     '2025-06-18 10:30:00', '2025-06-20 14:00:00',
      'ENTREGADO', 'ALTA',
      ST_SetSRID(ST_MakeLine(
                         ST_MakePoint(-70.7000, -33.5000),
@@ -347,7 +347,7 @@ VALUES
                 ), 4326)),
 
     (1, 3, 1,
-     '2025-05-01 08:00:00', '2025-05-01 13:00:00',
+     '2025-06-01 08:00:00', '2025-06-21 13:00:00',
      'PENDIENTE', 'ALTA',
      ST_SetSRID(ST_MakeLine(ARRAY[
                                 ST_MakePoint(-70.7400, -33.4200), -- Ubicado en Zona Central Noroeste
@@ -357,7 +357,7 @@ VALUES
     ),
 
     (6, 8, 8,
-     '2025-05-19 12:45:00', '2025-05-20 10:00:00',
+     '2025-06-19 12:45:00', '2025-06-22 10:00:00',
      'PENDIENTE', 'ALTA',
      ST_SetSRID(ST_MakeLine(
                         ST_MakePoint(-70.7100, -33.5100),

@@ -31,9 +31,11 @@ JOIN
     zonas_cobertura z
 ON 
     ST_Intersects(
-        ST_Buffer(c.ubicacion::geography, 1000)::geometry,  -- Buffer de 1000 metros alrededor del cliente
+        ST_Buffer(c.ubicacion::geography, 1000)::geometry,
         z.geom
-    );
+    )
+WHERE 
+    c.cliente_id = 2;
 
 
 

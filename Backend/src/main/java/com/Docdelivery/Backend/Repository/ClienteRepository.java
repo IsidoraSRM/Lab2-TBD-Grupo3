@@ -145,25 +145,27 @@ public class  ClienteRepository implements ClienteRepositoryCustom {
 
     //Consulta 2: Verificar si los clientes están dentro de una zona de cobertura (con buffer de 1km)
     @Override
-    public List<Map<String, Object>> verificarClientesEnZonas() {
+    public List<Map<String, Object>> verificarClienteEnZona(Long clienteId) {
         String sql = """
-            SELECT 
-                c.cliente_id, 
-                c.nombre, 
-                z.zona_id, 
-                z.nombre AS nombre_zona
-            FROM 
-                cliente c
-            JOIN 
-                zonas_cobertura z
-            ON 
-                ST_Intersects(
-                    ST_Buffer(c.ubicacion::geography, 1000)::geometry,
-                    z.geom
-                )
+        SELECT 
+            c.cliente_id,
+            c.nombre,
+            z.zona_id,
+            z.nombre AS nombre_zona
+        FROM 
+            cliente c
+        JOIN 
+            zonas_cobertura z
+        ON 
+            ST_Intersects(
+                ST_Buffer(c.ubicacion::geography, 1000)::geometry,
+                z.geom
+            )
+        WHERE 
+            c.cliente_id = 2
         """;
 
-        return jdbcTemplate.queryForList(sql);
+        return jdbcTemplate.queryForList(sql, clienteId);
     }
 
 
