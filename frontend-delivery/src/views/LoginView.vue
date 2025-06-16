@@ -114,6 +114,29 @@
           <label for="register-confirm" :class="{ 'label-float': passwordConfirmation }">Confirmar Contraseña</label>
         </div>
 
+        <div class="input-group">
+          <input
+            type="number"
+            step="any"
+            id="register-latitud"
+            v-model="registerData.latitud"
+            required
+          />
+          <label for="register-latitud" :class="{ 'label-float': registerData.latitud }">Latitud</label>
+        </div>
+
+        <div class="input-group">
+          <input
+            type="number"
+            step="any"
+            id="register-longitud"
+            v-model="registerData.longitud"
+            required
+          />
+          <label for="register-longitud" :class="{ 'label-float': registerData.longitud }">Longitud</label>
+        </div>
+
+
         <button 
           type="submit" 
           class="login-button" 
@@ -153,7 +176,9 @@ export default {
       email: '',
       phone: '',
       birthdate: '',
-      password: ''
+      password: '',
+      latitud: '',      
+      longitud: ''     
     });
 
     const passwordConfirmation = ref('');
@@ -197,9 +222,8 @@ export default {
           ...registerData.value,
           role: 'CLIENTE'
         };
-        
         await axios.post(
-          process.env.VUE_APP_API_URL + 'auth/register',
+          'http://localhost:8080/auth/register', // <-- cambia aquí temporalmente
           userData
         );
         
@@ -232,7 +256,9 @@ export default {
         email: '',
         phone: '',
         birthdate: '',
-        password: ''
+        password: '',
+        latitud: '',     // <- NUEVO
+        longitud: ''     // <- NUEVO
       };
       passwordConfirmation.value = '';
     };

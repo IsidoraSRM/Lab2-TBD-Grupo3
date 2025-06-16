@@ -398,17 +398,16 @@ export default {
           // NUEVA: Clientes a más de 5km
           const response = await clienteService.getClientesMasDe5Km();
           this.queryTitle = 'Clientes a más de 5km de cualquier empresa o farmacia';
-          this.queryHeaders = ['ID', 'Nombre', 'Email', 'Dirección', 'Latitud', 'Longitud', 'Distancia mínima (km)'];
+          this.queryHeaders = ['ID Cliente', 'Nombre', 'Distancia mínima (km)'];
           this.queryResults = (response.data || []).map(item => [
-            item.id || '--',
-            item.nombre || '--',
-            item.email || '--',
-            item.direccion || '--',
-            item.latitud?.toFixed(6) || '--',
-            item.longitud?.toFixed(6) || '--',
-            item.distanciaMinima?.toFixed(2) || '--'
+            item.cliente_id ?? '--',
+            item.nombre ?? '--',
+            item.distancia_minima != null
+              ? (item.distancia_minima / 1000).toLocaleString('es-CL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+              : '--'
           ]);
         }
+
         else if (this.selectedQuery === '13') {
           const idCliente = this.clienteIdInput?.trim();
           if (!idCliente) {

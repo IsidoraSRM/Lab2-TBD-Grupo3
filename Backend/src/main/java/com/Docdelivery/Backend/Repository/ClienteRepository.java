@@ -132,8 +132,13 @@ public class  ClienteRepository implements ClienteRepositoryCustom {
                 ")) AS distancia_minima " +
                 "FROM cliente c " +
                 "JOIN EmpresaAsociada e ON TRUE " +
+                "WHERE c.ubicacion IS NOT NULL " +
+                "  AND e.ubicacion IS NOT NULL " +
+                "  AND ST_X(c.ubicacion) <> 0 AND ST_Y(c.ubicacion) <> 0 " +
+                "  AND ST_X(e.ubicacion) <> 0 AND ST_Y(e.ubicacion) <> 0 " +
                 "GROUP BY c.cliente_id, c.nombre " +
                 "HAVING MIN(ST_Distance(ST_Transform(c.ubicacion, 3857), ST_Transform(e.ubicacion, 3857))) > 5000 ";
+
         try {
             return jdbcTemplate.queryForList(sql);
         } catch (Exception e) {
