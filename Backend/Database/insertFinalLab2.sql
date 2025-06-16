@@ -135,7 +135,11 @@ INSERT INTO cliente (nombre, direccion, email, telefono, ubicacion) VALUES
 
 ('Ricardo Mora', 'Aníbal Pinto 707, Puerto Montt',
  'ricardo.mora@email.com', '555-100-2010',
- ST_SetSRID(ST_MakePoint(-70.7400, -33.4150), 4326));
+ ST_SetSRID(ST_MakePoint(-70.7400, -33.4150), 4326)),
+
+('Pepito Perez', 'Av. Manso de Velasco 456, Curicó',
+ 'pepito.perez@email.com', '555-100-2011',
+ ST_SetSRID(ST_MakePoint(-71.2486, -34.9828), 4326);
 
 -------------------------------
 -- Insertar registros en la tabla repartidor

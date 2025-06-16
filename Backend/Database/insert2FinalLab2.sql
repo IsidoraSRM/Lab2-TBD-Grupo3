@@ -255,7 +255,25 @@ VALUES
      'Calle Destino 1010, Puerto Montt',
      'Av. Inicio 707, Puerto Montt',
      ST_SetSRID(ST_MakePoint(-70.7410, -33.3910), 4326),
-     ST_SetSRID(ST_MakePoint(-70.7450, -33.3950), 4326));
+     ST_SetSRID(ST_MakePoint(-70.7450, -33.3950), 4326)),
+
+    (2, 1, 1,
+     'Calle Destino 102, Santiago',
+     'Av. Inicio 124, Santiago',
+     ST_SetSRID(ST_MakePoint(-70.6420, -33.4420), 4326),
+     ST_SetSRID(ST_MakePoint(-70.6460, -33.4460), 4326)),
+
+    (3, 1, 3,
+     'Calle Destino 103, Santiago',
+     'Av. Inicio 125, Santiago',
+     ST_SetSRID(ST_MakePoint(-70.6430, -33.4430), 4326),
+     ST_SetSRID(ST_MakePoint(-70.6470, -33.4470), 4326)),
+
+    (1, 1, 2,
+     'Calle Destino 104, Santiago',
+     'Av. Inicio 126, Santiago',
+     ST_SetSRID(ST_MakePoint(-70.6440, -33.4440), 4326),
+     ST_SetSRID(ST_MakePoint(-70.6480, -33.4480), 4326));
 
 -------------------------------
 -- Insertar registros en la tabla MedioDePago
