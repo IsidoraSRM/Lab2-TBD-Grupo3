@@ -591,11 +591,12 @@ VALUES
 -- Región 6: Valparaíso
 INSERT INTO zonas_cobertura (nombre, geom)
 VALUES
-    ('Valparaíso',
-     ST_GeomFromText(
-             'MULTIPOLYGON(((-71.8 -32.0, -70.3 -32.0, -70.3 -34.0, -71.8 -34.0, -71.8 -32.0)))',
-             4326
-     )
+    (
+        'Valparaíso',
+        ST_GeomFromText(
+                'MULTIPOLYGON(((-71.2 -33.0, -70.9 -33.0, -70.9 -33.3, -71.2 -33.3, -71.2 -33.0)))',
+                4326
+        )
     );
 
 
