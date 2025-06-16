@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface ClienteRepositoryCustom {
-    List<Map<String, Object>> verificarClientesEnZonas();
+    List<Map<String, Object>> verificarClienteEnZona(Long clienteId);
+
 }
 
