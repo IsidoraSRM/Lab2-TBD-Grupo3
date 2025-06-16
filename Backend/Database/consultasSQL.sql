@@ -58,4 +58,53 @@ GROUP BY
 
 
 -- consulta numero 4
+SELECT
+    e.nombreEmpresa,
+    d.direccionDestino,
+    ST_Distance(
+            ST_Transform(e.ubicacion, 3857),
+            ST_Transform(d.ubicacionDestino, 3857)
+    ) / 1000 AS distancia_km
+FROM DetallePedido d
+         JOIN OrderEntity o ON d.idPedido = o.idPedido
+         JOIN EmpresaAsociada e ON o.idEmpresaAsociada = e.idEmpresaAsociada
+WHERE ST_Distance(
+              ST_Transform(e.ubicacion, 3857),
+              ST_Transform(d.ubicacionDestino, 3857)
+      ) = (
+          SELECT MAX(ST_Distance(
+                  ST_Transform(e2.ubicacion, 3857),
+                  ST_Transform(d2.ubicacionDestino, 3857)
+                     ))
+          FROM DetallePedido d2
+                   JOIN OrderEntity o2 ON d2.idPedido = o2.idPedido
+                   JOIN EmpresaAsociada e2 ON o2.idEmpresaAsociada = e2.idEmpresaAsociada
+          WHERE e2.idEmpresaAsociada = e.idEmpresaAsociada
+      )
+ORDER BY distancia_km DESC;
 
+
+-- consulta 5
+SELECT
+    o.idPedido,
+    e.nombreEmpresa,
+    COUNT(z.zona_id) AS zonas_cruzadas
+FROM OrderEntity o
+    JOIN EmpresaAsociada e ON o.idEmpresaAsociada = e.idEmpresaAsociada
+    JOIN zonas_cobertura z ON ST_Intersects(o.ruta_estimada, z.geom)
+GROUP BY o.idPedido, e.nombreEmpresa
+HAVING COUNT(z.zona_id) > 2;
+
+
+-- consulta 6
+SELECT
+    c.cliente_id,
+    c.nombre,
+    MIN(ST_Distance(
+        ST_Transform(c.ubicacion, 3857),
+        ST_Transform(e.ubicacion, 3857)
+            )) AS distancia_minima
+FROM cliente c
+    JOIN EmpresaAsociada e ON TRUE
+GROUP BY c.cliente_id, c.nombre
+HAVING MIN(ST_Distance(ST_Transform(c.ubicacion, 3857), ST_Transform(e.ubicacion, 3857))) > 5000;
