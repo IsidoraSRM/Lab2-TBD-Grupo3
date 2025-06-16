@@ -29,9 +29,16 @@
             <option value="6">Obtener el medio de pago más usado en pedidos urgentes</option>
             <option value="7">[LAB 2] 5 puntos de entrega más cercanos a la empresa</option>
             <option value="8">[LAB 2] Punto de entrega más lejano desde cada empresa</option>
+            <option value="9">[LAB 2] Pedidos cuya ruta cruza más de 2 zonas</option>
+            <option value="10">[EXTRA] Zona a la que pertenece un cliente</option>
+            <option value="11">[EXTRA] Zonas con alta densidad de pedidos</option>
+            <option value="12">[LAB 2] Clientes a más de 5km de cualquier empresa/farmacia</option>
+            <option value="13">[LAB 2] ¿Cliente está en zona de cobertura? (buffer 1km)</option>
+            <option value="14">Distancia recorrida por repartidor en el último mes</option>
           </select>
           <input v-if="selectedQuery === '7'" v-model="empresaInput" placeholder="Nombre de la empresa" class="empresa-input" style="margin-left: 1rem; min-width: 200px;" />
-          <button class="btn-run-query" @click="runQuery" :disabled="!selectedQuery || (selectedQuery === '7' && !empresaInput)">
+          <input v-if="selectedQuery === '10'" v-model="clienteIdInput" placeholder="ID del cliente" class="empresa-input" style="margin-left: 1rem; min-width: 200px;" />
+          <button class="btn-run-query" @click="runQuery" :disabled="!selectedQuery || (selectedQuery === '7' && !empresaInput) || (selectedQuery === '10' && !clienteIdInput)">
             Ejecutar
           </button>
         </div>
@@ -171,17 +178,10 @@ export default {
           text: 'Nuevo registro de cliente premium',
           time: 'Hace 1 hora',
           read: true
-        },
-        {
-          id: 3,
-          type: 'info',
-          icon: 'fas fa-info-circle',
-          text: 'Actualización del sistema programada para hoy a las 23:00',
-          time: 'Hace 3 horas',
-          read: true
         }
       ],
       empresaInput: '',
+      clienteIdInput: '',
     }
   },
   methods: {
@@ -324,6 +324,80 @@ export default {
             item.longitud || '--'
           ]);
         }
+        else if (this.selectedQuery === '9') {
+          const response = await orderService.getPedidosZonasCruzadas();
+          this.queryTitle = 'Pedidos cuya ruta cruza más de 2 zonas';
+          this.queryHeaders = ['ID Pedido', 'Cliente', 'Detalle', 'Zonas Cruzadas'];
+          this.queryResults = response.data.map(item => [
+            item.idPedido || '--',
+            item.cliente || '--',
+            item.detalle || '--',
+            item.zonasCruzadas || '--'
+          ]);
+        }
+        else if (this.selectedQuery === '10') {
+          const id = this.clienteIdInput.trim();
+          if (!id) {
+            this.queryResults = [['Debe ingresar un ID de cliente']];
+            return;
+          }
+          const response = await orderService.getZonaCliente(id);
+          this.queryTitle = `Zona a la que pertenece el cliente #${id}`;
+          this.queryHeaders = ['Zona'];
+          this.queryResults = [[response.data]];
+        }
+        else if (this.selectedQuery === '11') {
+          const response = await orderService.getHighDensityZones();
+          this.queryTitle = 'Zonas con alta densidad de pedidos';
+          this.queryHeaders = ['Zona', 'Cantidad de pedidos', 'Coordenadas'];
+          this.queryResults = response.data.map(item => [
+            item.zona || '--',
+            item.cantidadPedidos || '--',
+            item.coordenadas ? `${item.coordenadas.lat}, ${item.coordenadas.lng}` : '--'
+          ]);
+        }
+        else if (this.selectedQuery === '12') {
+          // NUEVA: Clientes a más de 5km
+          const response = await clienteService.getClientesMasDe5Km();
+          this.queryTitle = 'Clientes a más de 5km de cualquier empresa o farmacia';
+          this.queryHeaders = ['ID', 'Nombre', 'Email', 'Dirección', 'Latitud', 'Longitud', 'Distancia mínima (km)'];
+          this.queryResults = (response.data || []).map(item => [
+            item.id || '--',
+            item.nombre || '--',
+            item.email || '--',
+            item.direccion || '--',
+            item.latitud?.toFixed(6) || '--',
+            item.longitud?.toFixed(6) || '--',
+            item.distanciaMinima?.toFixed(2) || '--'
+          ]);
+        }
+        else if (this.selectedQuery === '13') {
+          // NUEVA: Verificar cliente en zona de cobertura
+          const idCliente = this.clienteIdInput?.trim();
+          if (!idCliente) {
+            this.queryResults = [['Debe ingresar un ID de cliente']];
+            return;
+          }
+          const response = await clienteService.verificarClienteEnZona(idCliente);
+          this.queryTitle = `¿Cliente #${idCliente} está en zona de cobertura? (buffer 1km)`;
+          this.queryHeaders = ['ID Cliente', 'En zona', 'Detalle/Zona'];
+          this.queryResults = (response.data || []).map(item => [
+            item.idCliente || '--',
+            item.enZona ? 'Sí' : 'No',
+            item.detalle || '--'
+          ]);
+        }
+        else if (this.selectedQuery === '14') {
+          const response = await repartidorService.getDistanciasRecorridasUltimoMes();
+          this.queryTitle = 'Distancia recorrida por repartidor (último mes)';
+          this.queryHeaders = ['ID Repartidor', 'Nombre', 'Distancia recorrida (km)'];
+          this.queryResults = (response.data || []).map(item => [
+            item.repartidorId || '--',
+            item.nombre || '--',
+            item.distanciaTotalMetros ? (item.distanciaTotalMetros / 1000).toFixed(2) : '--'
+          ]);
+        }
+
       } catch (error) {
         console.error('Error al obtener los datos:', error);
         this.queryError = 'Hubo un problema al cargar los datos. Intenta de nuevo más tarde.';
@@ -331,55 +405,7 @@ export default {
         this.queryLoading = false;
       }
     },
-    
-    loadView() {
-      if (this.selectedView === '14') {
-        return;
-      }
-      if(this.selectedView === '13'){
-        return;
 
-      }
-      if(this.selectedView === '15'){
-        return;
-
-      }
-      this.viewLoading = true
-      this.viewResults = null
-      
-      setTimeout(() => {
-        switch(this.selectedView) {
-          case '13':
-            this.viewTitle = 'Resumen de pedidos por cliente'
-            this.viewHeaders = ['Cliente', 'Total gastado', 'N° de pedidos', 'Último pedido']
-            this.viewResults = [
-              ['Ana Vargas', '$1,450,000', 18, '2023-05-15'],
-              ['Luis Méndez', '$1,200,000', 15, '2023-05-14'],
-              ['Carlota Ruiz', '$980,000', 12, '2023-05-10']
-            ];
-            break;
-          case '14':
-            this.viewTitle = 'Desempeño por repartidor'
-            this.viewHeaders = ['Repartidor', 'Pedidos entregados', 'Retrasos']
-            this.viewResults = [
-              ['Juan Pérez', 50, 2],
-              ['Carla Torres', 45, 1],
-              ['Pedro López', 60, 0]
-            ];
-            break;
-          case '15':
-            this.viewTitle = 'Empresas con mayor volumen'
-            this.viewHeaders = ['Empresa', 'Volumen total', 'Pedidos procesados']
-            this.viewResults = [
-              ['Empresa A', '$5,000,000', 100],
-              ['Empresa B', '$4,200,000', 95],
-              ['Empresa C', '$3,600,000', 90]
-            ];
-            break;
-        }
-        this.viewLoading = false
-      }, 1000)
-    },
     dismissNotification(id) {
       this.notifications = this.notifications.filter(notification => notification.id !== id);
     },  
@@ -395,63 +421,50 @@ export default {
 }
 
 .admin-header {
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--card-bg) 100%);
-  border-radius: 16px;
+  background-color: var(--card-bg);
   border: 1px solid var(--border-blue);
-  padding: 2rem;
+  border-radius: 12px;
+  padding: 1.5rem;
   margin-bottom: 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.admin-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--blue-neon), transparent);
 }
 
 .header-left h1 {
-  font-size: 2rem;
+  font-size: 1.75rem;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
-  background: linear-gradient(45deg, var(--text-primary), var(--blue-neon));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 .welcome-message {
   color: var(--text-secondary);
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .refresh-btn {
   background-color: var(--primary-blue);
   color: var(--text-primary);
   border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   transition: all 0.3s ease;
+  font-size: 0.875rem;
 }
 
 .refresh-btn:hover {
   background-color: var(--primary-blue-hover);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .last-updated {
@@ -461,26 +474,37 @@ export default {
 
 .main-content {
   display: grid;
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
 }
 
 .card {
   background-color: var(--card-bg);
-  border-radius: 12px;
   border: 1px solid var(--border-blue);
-  padding: 1.5rem;
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
 }
 
 .card-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-blue);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
 }
 
 .card-header h2 {
   font-size: 1.25rem;
   color: var(--text-primary);
+  margin: 0;
+}
+
+.card-body {
+  padding: 1.5rem;
 }
 
 .query-section {
@@ -494,9 +518,22 @@ export default {
   border: 1px solid var(--border-blue);
   color: var(--text-primary);
   padding: 0.75rem 1rem;
-  border-radius: 8px;
+  border-radius: 6px;
   width: 100%;
-  max-width: 500px;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+
+.query-select:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 2px var(--blue-glow);
+  outline: none;
+}
+
+.query-select option {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 0.5rem;
 }
 
 .empresa-input {
@@ -504,7 +541,86 @@ export default {
   border: 1px solid var(--border-blue);
   color: var(--text-primary);
   padding: 0.75rem 1rem;
-  border-radius: 8px;
+  border-radius: 6px;
+  width: 100%;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+
+.empresa-input:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 2px var(--blue-glow);
+  outline: none;
+}
+
+.empresa-input::placeholder {
+  color: var(--placeholder-color);
+}
+
+.btn-run-query {
+  background-color: var(--primary-blue);
+  color: var(--text-primary);
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-run-query:hover {
+  background-color: var(--primary-blue-hover);
+  transform: translateY(-1px);
+}
+
+.btn-run-query:disabled {
+  background-color: var(--dark-gray);
+  cursor: not-allowed;
+}
+
+.results-section {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: var(--bg-secondary);
+  border-radius: 6px;
+  border: 1px solid var(--border-blue);
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.results-table th {
+  text-align: left;
+  padding: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  border-bottom: 1px solid var(--border-blue);
+}
+
+.results-table td {
+  padding: 0.75rem;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-blue);
+}
+
+.results-table tr:last-child td {
+  border-bottom: none;
+}
+
+.results-table tr:hover td {
+  background-color: var(--bg-secondary);
+}
+
+.no-results {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
 }
 
 @media (max-width: 768px) {
@@ -516,7 +632,6 @@ export default {
     flex-direction: column;
     text-align: center;
     gap: 1rem;
-    padding: 1.5rem;
   }
 
   .header-right {
@@ -528,159 +643,15 @@ export default {
     width: 100%;
     justify-content: center;
   }
-}
 
-.loading-indicator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
-  color: var(--text-secondary);
-  gap: 10px;
-}
+  .main-content {
+    grid-template-columns: 1fr;
+  }
 
-.empty-state {
-  text-align: center;
-  padding: 40px;
-  color: var(--text-secondary);
-}
-
-.empty-state i {
-  font-size: 40px;
-  margin-bottom: 15px;
-}
-
-.empty-state p {
-  margin: 0;
-  font-size: 14px;
-}
-
-.results-header {
-  margin-bottom: 15px;
-}
-
-.results-header h3 {
-  margin: 0;
-  font-size: 16px;
-  color: var(--text-primary);
-}
-
-.table-responsive {
-  overflow-x: auto;
-  border-radius: 6px;
-  border: 1px solid var(--border-blue);
-}
-
-.results-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.results-table th, .results-table td {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid var(--border-blue);
-}
-
-.results-table th {
-  background: var(--bg-secondary);
-  font-weight: 600;
-  color: var(--primary-blue);
-}
-
-.results-table tr:hover td {
-  background: var(--bg-primary);
-}
-
-.results-table tr:last-child td {
-  border-bottom: none;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.stat-card {
-  background-color: var(--card-bg);
-  padding: 1.5rem;
-  border-radius: 8px;
-  border: 1px solid var(--border-blue);
-  box-shadow: 0 4px 6px var(--blue-glow);
-}
-
-.stat-title {
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  margin-bottom: 0.5rem;
-}
-
-.stat-value {
-  color: var(--text-primary);
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.data-table {
-  background-color: var(--bg-secondary);
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid var(--border-blue);
-}
-
-.table-header {
-  background-color: var(--dark-gray);
-  color: var(--text-primary);
-  padding: 1rem;
-}
-
-.table-row {
-  border-bottom: 1px solid var(--border-blue);
-  transition: background-color 0.3s;
-}
-
-.table-row:hover {
-  background-color: var(--bg-secondary);
-}
-
-.table-cell {
-  padding: 1rem;
-  color: var(--text-secondary);
-}
-
-.action-button {
-  background-color: var(--primary-blue);
-  color: var(--text-primary);
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.action-button:hover {
-  background-color: var(--primary-blue-hover);
-}
-
-.filter-section {
-  background-color: var(--card-bg);
-  padding: 1.5rem;
-  border-radius: 8px;
-  margin-bottom: 2rem;
-  border: 1px solid var(--border-blue);
-}
-
-.search-input {
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-blue);
-  color: var(--text-primary);
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-}
-
-.search-input::placeholder {
-  color: var(--placeholder-color);
+  .card-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
 }
 </style>

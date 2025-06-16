@@ -90,6 +90,21 @@ const orderService = {
     return axios.get(`${API_URL}/repartidor/${repartidorId}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` }
     });
+  },
+  getPedidosZonasCruzadas() {
+    return axios.get(`${API_URL2}/zonas-cruzadas`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` }
+    });
+  },
+  getZonaCliente(clienteId) {
+    return axios.get(`${API_URL2}/extra1/${clienteId}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` }
+    });
+  },
+  getHighDensityZones() {
+    return axios.get(`${API_URL2}/extra2`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` }
+    });
   }
 };
 

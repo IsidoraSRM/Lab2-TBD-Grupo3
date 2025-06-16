@@ -23,5 +23,17 @@ export default {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}` 
       }
     });
-  }     
+  },
+  
+  getClientesMasDe5Km() {
+    return axios.get(`${API_URL}/clientesMasDe5Km`, {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
+    });
+  },
+  verificarClienteEnZona(idCliente) {
+    return axios.get(`${API_URL}/cliente-en-zona/${idCliente}`, {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
+    });
+  }
+
 };

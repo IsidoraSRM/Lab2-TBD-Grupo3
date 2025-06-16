@@ -6,14 +6,21 @@ export default {
   getTop3Repartidores() {
     return axios.get(`${API_URL}/top3`, {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}` // Si es necesario
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
     });
-  }, 
+  },
   getDesempenoRepartidor() {
     return axios.get(`${API_URL}/desempeno`, {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}` // Si es necesario
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      }
+    });
+  },
+  getDistanciasRecorridasUltimoMes() {
+    return axios.get(`${API_URL}/distancia-ultimo-mes`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
     });
   }

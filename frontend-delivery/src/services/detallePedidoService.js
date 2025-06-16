@@ -12,5 +12,20 @@ export default {
         'Authorization': `Bearer ${token}`
       }
     });
+  },
+  getEntregasCercanas(empresa) {
+    return axios.get(`http://localhost:8080/api/detallepedidos/entregasCercanas`, {
+      params: { empresa },
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+  },
+  getPuntosEntregaMasLejano() {
+    return axios.get(`http://localhost:8080/api/detallepedidos/punto-lejano`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
   }
 };
