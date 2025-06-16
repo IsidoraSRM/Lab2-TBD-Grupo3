@@ -27,8 +27,11 @@
             <option value="4">Calcular el tiempo promedio entre pedido y entrega por repartidor.</option>
             <option value="5">Obtener los 3 repartidores con mejor rendimiento (basado en entregas y puntuación).</option>
             <option value="6">Obtener el medio de pago más usado en pedidos urgentes</option>
+            <option value="7">[LAB 2] 5 puntos de entrega más cercanos a la empresa</option>
+            <option value="8">[LAB 2] Punto de entrega más lejano desde cada empresa</option>
           </select>
-          <button class="btn-run-query" @click="runQuery" :disabled="!selectedQuery">
+          <input v-if="selectedQuery === '7'" v-model="empresaInput" placeholder="Nombre de la empresa" class="empresa-input" style="margin-left: 1rem; min-width: 200px;" />
+          <button class="btn-run-query" @click="runQuery" :disabled="!selectedQuery || (selectedQuery === '7' && !empresaInput)">
             Ejecutar
           </button>
         </div>
@@ -177,7 +180,8 @@ export default {
           time: 'Hace 3 horas',
           read: true
         }
-      ]
+      ],
+      empresaInput: '',
     }
   },
   methods: {
@@ -290,6 +294,36 @@ export default {
             item.cantidad
           ]);
         }
+        else if (this.selectedQuery === '7') {
+          const empresa = this.empresaInput.trim();
+          const response = await detallePedidoService.getEntregasCercanas(empresa);
+          console.log('Respuesta del backend:', response.data);
+
+          this.queryTitle = `5 puntos de entrega más cercanos a la empresa "${empresa}"`;
+          this.queryHeaders = ['Dirección', 'Distancia (km)', 'Latitud', 'Longitud'];
+
+          this.queryResults = response.data.map(item => [
+            item.direccion || 'No disponible',
+            item.distancia?.toFixed(2) || '--',
+            item.latitud || '--',
+            item.longitud || '--'
+          ]);
+        }
+        else if (this.selectedQuery === '8') {
+          const response = await detallePedidoService.getPuntosEntregaMasLejano();
+          console.log('Respuesta del backend:', response.data);
+
+          this.queryTitle = 'Punto de entrega más lejano desde cada empresa';
+          this.queryHeaders = ['Empresa', 'Dirección', 'Distancia (km)', 'Latitud', 'Longitud'];
+
+          this.queryResults = response.data.map(item => [
+            item.empresa || 'No disponible',
+            item.direccion || 'No disponible',
+            item.distancia?.toFixed(2) || '--',
+            item.latitud || '--',
+            item.longitud || '--'
+          ]);
+        }
       } catch (error) {
         console.error('Error al obtener los datos:', error);
         this.queryError = 'Hubo un problema al cargar los datos. Intenta de nuevo más tarde.';
@@ -361,128 +395,139 @@ export default {
 }
 
 .admin-header {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--card-bg) 100%);
+  border-radius: 16px;
+  border: 1px solid var(--border-blue);
+  padding: 2rem;
+  margin-bottom: 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 20px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--blue-neon), transparent);
 }
 
 .header-left h1 {
-  margin: 0;
-  font-size: 24px;
-  color: #2c3e50;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(45deg, var(--text-primary), var(--blue-neon));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .welcome-message {
-  margin: 5px 0 0;
-  color: #7f8c8d;
-  font-size: 14px;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 1rem;
 }
 
 .refresh-btn {
-  padding: 8px 15px;
-  background: #3498db;
-  color: white;
+  background-color: var(--primary-blue);
+  color: var(--text-primary);
   border: none;
-  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  transition: background 0.3s ease;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
 }
 
 .refresh-btn:hover {
-  background: #2980b9;
+  background-color: var(--primary-blue-hover);
+  transform: translateY(-2px);
 }
 
 .last-updated {
-  font-size: 13px;
-  color: #7f8c8d;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
 }
 
 .main-content {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-}
-
-@media (min-width: 1200px) {
-  .main-content {
-    grid-template-columns: 1fr 1fr;
-  }
+  gap: 2rem;
 }
 
 .card {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  border: 1px solid var(--border-blue);
+  padding: 1.5rem;
 }
 
 .card-header {
-  padding: 15px 20px;
-  border-bottom: 1px solid #eee;
   display: flex;
-  flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  margin-bottom: 1.5rem;
 }
 
 .card-header h2 {
-  margin: 0;
-  font-size: 18px;
-  color: #2c3e50;
-  flex-grow: 1;
+  font-size: 1.25rem;
+  color: var(--text-primary);
 }
 
-.card-body {
-  padding: 20px;
+.query-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .query-select {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: #f8f9fa;
-  font-size: 14px;
-  min-width: 200px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-blue);
+  color: var(--text-primary);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
 }
 
-.btn-run-query {
-  padding: 8px 15px;
-  background: #2ecc71;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.3s ease;
+.empresa-input {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-blue);
+  color: var(--text-primary);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
 }
 
-.btn-run-query:hover {
-  background: #27ae60;
-}
+@media (max-width: 768px) {
+  .admin-dashboard {
+    padding: 1rem;
+  }
 
-.btn-run-query:disabled {
-  background: #bdc3c7;
-  cursor: not-allowed;
+  .admin-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  .header-right {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .refresh-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 .loading-indicator {
@@ -490,14 +535,14 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 40px;
-  color: #7f8c8d;
+  color: var(--text-secondary);
   gap: 10px;
 }
 
 .empty-state {
   text-align: center;
   padding: 40px;
-  color: #bdc3c7;
+  color: var(--text-secondary);
 }
 
 .empty-state i {
@@ -517,13 +562,13 @@ export default {
 .results-header h3 {
   margin: 0;
   font-size: 16px;
-  color: #2c3e50;
+  color: var(--text-primary);
 }
 
 .table-responsive {
   overflow-x: auto;
   border-radius: 6px;
-  border: 1px solid #eee;
+  border: 1px solid var(--border-blue);
 }
 
 .results-table {
@@ -534,17 +579,17 @@ export default {
 .results-table th, .results-table td {
   padding: 12px 15px;
   text-align: left;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border-blue);
 }
 
 .results-table th {
-  background: #f8f9fa;
+  background: var(--bg-secondary);
   font-weight: 600;
-  color: #34495e;
+  color: var(--primary-blue);
 }
 
 .results-table tr:hover td {
-  background: #f5f7fa;
+  background: var(--bg-primary);
 }
 
 .results-table tr:last-child td {

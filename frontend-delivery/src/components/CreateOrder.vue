@@ -38,7 +38,7 @@
         <p class="subtitle">Complete el formulario para solicitar su servicio</p>
       </div>
       
-      <form @submit.prevent="createOrder">homeClient
+      <form @submit.prevent="createOrder">
         <!-- Progreso -->
         <div class="progress-bar">
           <div class="progress-step active">
@@ -369,16 +369,16 @@ export default {
   justify-content: center;
   align-items: center;
   padding: 30px 20px;
-  background-color: var(--bg-color);
+  background-color: var(--bg-primary);
   min-height: 100vh;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .create-card {
-  background: #ffffff;
+  background: var(--card-bg);
   padding: 0;
   border-radius: 12px;
-  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-blue);
   width: 100%;
   max-width: 600px;
   overflow: hidden;
@@ -387,14 +387,27 @@ export default {
 
 .create-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 28px rgba(18, 90, 108, 0.18);
+  box-shadow: 0 12px 28px var(--blue-glow);
 }
 
 .card-header {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  background: linear-gradient(135deg, var(--bg-secondary), #2d1b69);
   padding: 25px 30px;
   text-align: center;
-  color: rgb(0, 0, 0);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-blue);
+  position: relative;
+  overflow: hidden;
+}
+
+.card-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--blue-neon), transparent);
 }
 
 h2 {
@@ -402,13 +415,16 @@ h2 {
   font-size: 28px;
   margin: 0;
   letter-spacing: 0.5px;
+  background: linear-gradient(45deg, var(--text-primary), var(--blue-neon));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
   font-size: 16px;
   font-weight: normal;
   margin: 8px 0 0;
-  opacity: 0.9;
+  color: var(--text-secondary);
 }
 
 form {
@@ -430,7 +446,7 @@ form {
   left: 10%;
   right: 10%;
   height: 2px;
-  background-color: #e0e0e0;
+  background-color: var(--border-blue);
   z-index: 1;
 }
 
@@ -440,7 +456,7 @@ form {
   align-items: center;
   position: relative;
   z-index: 2;
-  color: #999;
+  color: var(--text-secondary);
   flex: 1;
 }
 
@@ -448,14 +464,15 @@ form {
   width: 35px;
   height: 35px;
   border-radius: 50%;
-  background-color: #e0e0e0;
-  color: #666;
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 8px;
   font-weight: 600;
   transition: all 0.3s ease;
+  border: 1px solid var(--border-blue);
 }
 
 .progress-step span {
@@ -464,21 +481,22 @@ form {
 }
 
 .progress-step.active .step-number {
-  background-color: var(--accent-color);
-  color: white;
+  background: linear-gradient(135deg, var(--primary-blue), #6d28d9);
+  color: var(--text-primary);
+  border: none;
 }
 
 .progress-step.active {
-  color: var(--accent-color);
+  color: var(--primary-blue);
 }
 
 /* Secciones de formulario */
 .form-section {
-  background-color: #fff;
+  background-color: var(--bg-secondary);
   padding: 20px;
   margin-bottom: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  border: 1px solid var(--border-blue);
 }
 
 .section-title {
@@ -486,10 +504,10 @@ form {
   align-items: center;
   font-size: 18px;
   font-weight: 600;
-  color: var(--primary-color);
+  color: var(--text-primary);
   margin-bottom: 20px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--border-blue);
 }
 
 .section-icon {
@@ -498,13 +516,13 @@ form {
   align-items: center;
   width: 32px;
   height: 32px;
-  background-color: rgba(18, 90, 108, 0.1);
+  background-color: rgba(109, 40, 217, 0.2);
   border-radius: 50%;
   margin-right: 12px;
 }
 
 .section-icon svg {
-  color: var(--primary-color);
+  color: var(--blue-neon);
 }
 
 /* Campos de formulario */
@@ -516,7 +534,7 @@ label {
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
-  color: var(--text-color);
+  color: var(--text-primary);
   font-size: 15px;
 }
 
@@ -529,22 +547,22 @@ label {
 input, select, textarea {
   width: 100%;
   padding: 12px 15px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border-blue);
   border-radius: 6px;
   font-size: 15px;
   transition: all 0.25s ease;
-  background-color: white;
-  color: var(--text-color);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
 }
 
 input:focus, select:focus, textarea:focus {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(209, 118, 0, 0.15);
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px var(--blue-glow);
   outline: none;
 }
 
 input::placeholder, textarea::placeholder {
-  color: #aaa;
+  color: var(--placeholder-color);
 }
 
 .select-container {
@@ -565,8 +583,8 @@ select {
   pointer-events: none;
   width: 10px;
   height: 10px;
-  border-right: 2px solid #999;
-  border-bottom: 2px solid #999;
+  border-right: 2px solid var(--text-secondary);
+  border-bottom: 2px solid var(--text-secondary);
   transform: translateY(-70%) rotate(45deg);
 }
 
@@ -580,19 +598,11 @@ textarea {
   display: flex;
   justify-content: space-between;
   margin-top: 5px;
+  gap: 10px;
 }
 
 .priority-option {
   flex: 1;
-  margin: 0 5px;
-}
-
-.priority-option:first-child {
-  margin-left: 0;
-}
-
-.priority-option:last-child {
-  margin-right: 0;
 }
 
 .priority-option input[type="radio"] {
@@ -604,11 +614,13 @@ textarea {
   flex-direction: column;
   align-items: center;
   padding: 12px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border-blue);
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
   font-weight: 500;
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
 }
 
 .priority-dot {
@@ -616,35 +628,41 @@ textarea {
   height: 18px;
   border-radius: 50%;
   margin-bottom: 8px;
+  border: 2px solid var(--border-blue);
+  transition: all 0.2s ease;
 }
 
 .priority-label.high .priority-dot {
-  background-color: #ffcdd2;
+  background-color: rgba(239, 68, 68, 0.2);
 }
 
 .priority-label.medium .priority-dot {
-  background-color: #fff9c4;
+  background-color: rgba(234, 179, 8, 0.2);
 }
 
 .priority-label.low .priority-dot {
-  background-color: #c8e6c9;
+  background-color: rgba(34, 197, 94, 0.2);
 }
 
 .priority-option input[type="radio"]:checked + .priority-label {
-  border-color: var(--accent-color);
-  background-color: rgba(209, 118, 0, 0.05);
+  border-color: var(--primary-blue);
+  background-color: rgba(59, 130, 246, 0.1);
+  color: var(--text-primary);
 }
 
 .priority-option input[type="radio"]:checked + .priority-label.high .priority-dot {
-  background-color: #f44336;
+  background-color: #ef4444;
+  border-color: #ef4444;
 }
 
 .priority-option input[type="radio"]:checked + .priority-label.medium .priority-dot {
-  background-color: #ffc107;
+  background-color: #eab308;
+  border-color: #eab308;
 }
 
 .priority-option input[type="radio"]:checked + .priority-label.low .priority-dot {
-  background-color: #4caf50;
+  background-color: #22c55e;
+  border-color: #22c55e;
 }
 
 /* Símbolo de moneda */
@@ -653,7 +671,7 @@ textarea {
   left: 15px;
   top: 50%;
   transform: translateY(-50%);
-  color: #666;
+  color: var(--text-secondary);
   font-weight: 500;
   font-size: 16px;
 }
@@ -672,8 +690,8 @@ input[type="number"] {
 .create-button {
   width: 100%;
   padding: 14px 20px;
-  background: #B55529;
-  color: rgb(0, 0, 0);
+  background: linear-gradient(135deg, var(--primary-blue), #6d28d9);
+  color: var(--text-primary);
   border: none;
   border-radius: 6px;
   font-size: 16px;
@@ -684,13 +702,13 @@ input[type="number"] {
   justify-content: center;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 4px 10px rgba(181, 85, 41, 0.3);
+  box-shadow: 0 4px 10px var(--blue-glow);
 }
 
 .create-button:hover {
-  background: var(--accent-hover);
+  background: linear-gradient(135deg, var(--primary-blue-hover), #5b21b6);
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(181, 85, 41, 0.4);
+  box-shadow: 0 6px 12px var(--blue-glow);
 }
 
 .create-button:active {
@@ -698,7 +716,7 @@ input[type="number"] {
 }
 
 .create-button:disabled {
-  background: #ccc;
+  background: var(--dark-gray);
   cursor: not-allowed;
   box-shadow: none;
 }
@@ -717,16 +735,16 @@ input[type="number"] {
   height: 20px;
   border: 2px solid rgba(255,255,255,0.3);
   border-radius: 50%;
-  border-top-color: #fff;
+  border-top-color: var(--text-primary);
   animation: spin 0.8s linear infinite;
 }
 
 /* Mensajes de éxito y error */
 .error-message, .success-message {
-  background-color: #fff;
+  background-color: var(--card-bg);
   padding: 0;
   border-radius: 12px;
-  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-blue);
   width: 100%;
   max-width: 500px;
   overflow: hidden;
@@ -738,11 +756,11 @@ input[type="number"] {
 }
 
 .error-message .message-content {
-  border-top: 6px solid var(--error-color);
+  border-top: 6px solid #ef4444;
 }
 
 .success-message .message-content {
-  border-top: 6px solid var(--success-color);
+  border-top: 6px solid #22c55e;
 }
 
 .message-icon {
@@ -756,24 +774,24 @@ input[type="number"] {
 }
 
 .error-icon {
-  background-color: rgba(198, 40, 40, 0.1);
-  color: var(--error-color);
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
 }
 
 .success-icon {
-  background-color: rgba(46, 125, 50, 0.1);
-  color: var(--success-color);
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
 }
 
 .error-message h3, .success-message h3 {
   margin-top: 0;
   font-size: 22px;
-  color: var(--text-color);
+  color: var(--text-primary);
   margin-bottom: 10px;
 }
 
 .error-message p, .success-message p {
-  color: var(--text-light);
+  color: var(--text-secondary);
   margin-bottom: 25px;
   font-size: 16px;
 }
@@ -785,9 +803,9 @@ input[type="number"] {
   align-items: center;
   justify-content: center;
   padding: 50px;
-  background-color: white;
+  background-color: var(--card-bg);
   border-radius: 12px;
-  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-blue);
   width: 100%;
   max-width: 400px;
 }
@@ -795,15 +813,15 @@ input[type="number"] {
 .spinner {
   width: 60px;
   height: 60px;
-  border: 4px solid rgba(18, 90, 108, 0.1);
+  border: 4px solid rgba(59, 130, 246, 0.1);
   border-radius: 50%;
-  border-top-color: var(--primary-color);
+  border-top-color: var(--primary-blue);
   animation: spin 1s linear infinite;
   margin-bottom: 20px;
 }
 
 .loading-spinner p {
-  color: var(--text-light);
+  color: var(--text-secondary);
   font-size: 16px;
 }
 
@@ -813,6 +831,10 @@ input[type="number"] {
 
 /* Responsividad */
 @media (max-width: 768px) {
+  .create-container {
+    padding: 20px;
+  }
+
   .create-card, .error-message, .success-message, .loading-spinner {
     max-width: 100%;
   }

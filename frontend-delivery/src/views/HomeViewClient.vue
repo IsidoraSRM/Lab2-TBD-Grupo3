@@ -179,35 +179,39 @@ export default {
 <template>
     <div class="home-view">
         <!-- Mensaje de carga/error -->
-        <div v-if="loading" class="loading-message">Cargando pedidos...</div>
+        <div v-if="loading" class="loading-message">
+            <div class="spinner"></div>
+            <span>Cargando pedidos...</span>
+        </div>
         <div v-if="error" class="error-message">{{ error }}</div>
 
         <!-- Hero Section -->
         <section class="hero-section">
-            <div class="hero-card card">
-                <h1>DocDelivery</h1>
-                <h2>Sistema de Gestión de Pedidos - Delivery de documentos</h2>
-                <p>Gestiona y realiza seguimiento a todos tus envíos de documentos de manera eficiente y segura.</p>
-            </div>
-        </section>
-
-        <!-- Sección de Bienvenida -->
-        <section class="welcome-section">
-            <div class="welcome-card card">
-                <h2>Bienvenido, {{ userName }}</h2>
-                <p>Tienes {{ activeOrders }} pedidos en curso</p>
-                
-                <div class="quick-actions">
-                    <router-link to="/client" class="btn btn-primary">Nuevo Pedido</router-link>
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Panel de Cliente</h1>
+                    <p class="welcome-text">Bienvenido, {{ userName }}</p>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-number">{{ activeOrders }}</span>
+                            <span class="stat-label">Pedidos Activos</span>
+                        </div>
+                    </div>
+                    <div class="hero-actions">
+                        <router-link to="/client" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Nuevo Pedido
+                        </router-link>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Sección de Pedidos Recientes -->
-        <section class="recent-orders">
+        <section class="orders-section">
             <div class="card">
                 <div class="section-header">
-                    <h3>Pedidos Recientes</h3>
+                    <h2>Pedidos Recientes</h2>
                     
                     <div class="filters">
                         <div class="search-box">
@@ -215,12 +219,13 @@ export default {
                                 type="text" 
                                 v-model="searchQuery" 
                                 placeholder="Buscar por número o prioridad..."
+                                class="search-input"
                             >
                             <i class="fas fa-search"></i>
                         </div>
                         
                         <select v-model="filterStatus" class="status-filter">
-                            <option value="all">Todos</option>
+                            <option value="all">Todos los pedidos</option>
                             <option value="active">En curso</option>
                             <option value="Entregado">Entregados</option>
                             <option value="En camino">En camino</option>
@@ -267,83 +272,261 @@ export default {
 <style scoped>
 .home-view {
     background-color: var(--bg-primary);
-    min-height: calc(100vh - 120px); /* Ajustar según tu navbar y footer */
+    min-height: 100vh;
     padding: 2rem;
 }
 
-/* Estilos para las tarjetas */
-.card {
-    background-color: var(--card-bg);
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    padding: 20px;
-    margin-bottom: 20px;
+/* Loading y Error */
+.loading-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    color: var(--text-secondary);
+    padding: 2rem;
+}
+
+.spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid var(--border-blue);
+    border-top-color: var(--primary-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.error-message {
+    color: #ef4444;
+    background-color: rgba(239, 68, 68, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
 }
 
 /* Hero Section */
 .hero-section {
-    margin-bottom: 30px;
+    margin-bottom: 3rem;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--card-bg) 100%);
+    border-radius: 16px;
+    border: 1px solid var(--border-blue);
+    overflow: hidden;
+    position: relative;
 }
 
-.hero-card {
-    text-align: center;
-    background-color: #125A6C;
-    color: white;
-    width: 100%;
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--blue-neon), transparent);
 }
 
-.hero-card h1 {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
+.hero-content {
+    padding: 3rem 2rem;
+    position: relative;
+    z-index: 1;
 }
 
-.hero-card h2 {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    font-weight: 400;
-}
-
-.hero-card p {
-    font-size: 1.1rem;
-    max-width: 700px;
+.hero-text {
+    max-width: 800px;
     margin: 0 auto;
-}
-
-/* Sección de Bienvenida */
-.welcome-card {
     text-align: center;
-    padding: 30px 20px;
 }
 
-.welcome-card h2 {
-    color: var(--text-primary);
-    margin-bottom: 10px;
+.hero-text h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, var(--text-primary), var(--blue-neon));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.welcome-card p {
+.welcome-text {
+    font-size: 1.25rem;
     color: var(--text-secondary);
-    margin-bottom: 25px;
-    font-size: 18px;
+    margin-bottom: 2rem;
 }
 
-.quick-actions {
+.stats {
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 3rem;
+    margin-bottom: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* Cards y Secciones */
+.card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-blue);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Tabla y Filtros */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
     flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.section-header h2 {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+}
+
+.filters {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.search-input {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-blue);
+    color: var(--text-primary);
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    border-radius: 8px;
+    width: 250px;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 2px var(--blue-glow);
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: var(--text-secondary);
+}
+
+.search-box {
+    position: relative;
+}
+
+.search-box i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+}
+
+.status-filter {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-blue);
+    color: var(--text-primary);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    min-width: 150px;
+}
+
+/* Tabla */
+.table-responsive {
+    overflow-x: auto;
+    margin: 0 -1.5rem;
+    padding: 0 1.5rem;
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.orders-table th {
+    background-color: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-blue);
+}
+
+.orders-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-blue);
+    color: var(--text-primary);
+}
+
+.orders-table tr:hover td {
+    background-color: var(--bg-secondary);
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.success {
+    background-color: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+}
+
+.warning {
+    background-color: rgba(234, 179, 8, 0.1);
+    color: #eab308;
+}
+
+.info {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: var(--primary-blue);
+}
+
+.danger {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
 }
 
 /* Botones */
 .btn {
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: none;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
 }
 
 .btn-primary {
@@ -356,171 +539,38 @@ export default {
     transform: translateY(-2px);
 }
 
-.btn-secondary {
-    background-color: #E2DCD2;
-    color: #125A6C;
-}
-
-.btn-secondary:hover {
-    background-color: #D5CEC3;
-}
-
-.btn-outline {
-    background: transparent;
-    border: 1px solid #125A6C;
-    color: #125A6C;
-}
-
-.btn-outline:hover {
-    background-color: rgba(18, 90, 108, 0.1);
-}
-
-.btn-action {
-    background: none;
-    border: none;
-    color: #125A6C;
-    cursor: pointer;
-    padding: 5px 10px;
-    margin: 0 5px;
-    font-size: 14px;
-    transition: color 0.3s;
-}
-
-.btn-action:hover {
-    color: #D17600;
-}
-
-/* Sección de Pedidos Recientes */
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 15px;
-}
-
-.filters {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-}
-
-.search-box {
-    position: relative;
-}
-
-.search-box input {
-    padding: 8px 15px 8px 35px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    width: 200px;
-}
-
-.search-box i {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #777;
-}
-
-.status-filter {
-    padding: 8px 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background: white;
-    color: #555;
-}
-
-.orders-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.orders-table th {
-    text-align: left;
-    padding: 12px 15px;
-    background-color: #f8f9fa;
-    color: #125A6C;
-    font-weight: 600;
-}
-
-.orders-table td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #eee;
-    vertical-align: middle;
-}
-
-.orders-table tr:hover td {
-    background-color: #f8f9fa;
-}
-
-.status-badge {
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    font-weight: 500;
-}
-
-.status-active {
-    background-color: var(--primary-blue);
-    color: var(--text-primary);
-}
-
-.status-pending {
-    background-color: var(--dark-gray);
-    color: var(--text-secondary);
-}
-
-.status-completed {
-    background-color: var(--blue-neon);
-    color: var(--text-primary);
-}
-
-.no-orders {
-    text-align: center;
-    padding: 30px;
-    color: #777;
-}
-
 /* Responsive */
 @media (max-width: 768px) {
-    .section-header {
-        flex-direction: column;
-        align-items: flex-start;
+    .home-view {
+        padding: 1rem;
     }
-    
-    .filters {
-        width: 100%;
-        flex-wrap: wrap;
+
+    .hero-content {
+        padding: 2rem 1rem;
     }
-    
-    .search-box input {
-        width: 100%;
-    }
-    
-    .orders-table {
-        display: block;
-        overflow-x: auto;
-    }
-    
-    .quick-actions {
-        flex-direction: column;
-        width: 100%;
-    }
-    
-    .btn {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .hero-card h1 {
+
+    .hero-text h1 {
         font-size: 2rem;
     }
-    
-    .hero-card h2 {
-        font-size: 1.2rem;
+
+    .section-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filters {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .search-input,
+    .status-filter {
+        width: 100%;
+    }
+
+    .stats {
+        flex-wrap: wrap;
+        gap: 1.5rem;
     }
 }
 </style>
