@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/customers';
-
+const API_URL = 'http://localhost:8080/api/customers';
 export default {
   getClienteQueMasHaGastado() {
     return axios.get(`${API_URL}/moreSpent`, {

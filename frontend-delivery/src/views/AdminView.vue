@@ -21,23 +21,23 @@
           <h2>Consultas Analíticas</h2>
           <select v-model="selectedQuery" class="query-select">
             <option value="" disabled>Seleccione una consulta</option>
-            <option value="1">Cliente que más ha gastado en pedidos entregados.</option>
-            <option value="2">Productos más pedidos por categoría</option>
-            <option value="3">Listar las empresas asociadas con más entregas fallidas.</option>
-            <option value="4">Calcular el tiempo promedio entre pedido y entrega por repartidor.</option>
-            <option value="5">Obtener los 3 repartidores con mejor rendimiento (basado en entregas y puntuación).</option>
-            <option value="6">Obtener el medio de pago más usado en pedidos urgentes</option>
+            <option value="1">[LAB 1] Cliente que más ha gastado en pedidos entregados.</option>
+            <option value="2">[LAB 1] Productos más pedidos por categoría</option>
+            <option value="3">[LAB 1] Listar las empresas asociadas con más entregas fallidas.</option>
+            <option value="4">[LAB 1] Calcular el tiempo promedio entre pedido y entrega por repartidor.</option>
+            <option value="5">[LAB 1] Obtener los 3 repartidores con mejor rendimiento (basado en entregas y puntuación).</option>
+            <option value="6">[LAB 1] Obtener el medio de pago más usado en pedidos urgentes</option>
             <option value="7">[LAB 2] 5 puntos de entrega más cercanos a la empresa</option>
             <option value="8">[LAB 2] Punto de entrega más lejano desde cada empresa</option>
             <option value="9">[LAB 2] Pedidos cuya ruta cruza más de 2 zonas</option>
-            <option value="10">[EXTRA] Zona a la que pertenece un cliente</option>
-            <option value="11">[EXTRA] Zonas con alta densidad de pedidos</option>
             <option value="12">[LAB 2] Clientes a más de 5km de cualquier empresa/farmacia</option>
             <option value="13">[LAB 2] ¿Cliente está en zona de cobertura? (buffer 1km)</option>
-            <option value="14">Distancia recorrida por repartidor en el último mes</option>
+            <option value="14">[LAB 2] Distancia recorrida por repartidor en el último mes</option>
+            <option value="10">[EXTRA] Zona a la que pertenece un cliente</option>
+            <option value="11">[EXTRA] Zonas con alta densidad de pedidos</option>
           </select>
           <input v-if="selectedQuery === '7'" v-model="empresaInput" placeholder="Nombre de la empresa" class="empresa-input" style="margin-left: 1rem; min-width: 200px;" />
-          <input v-if="selectedQuery === '10'" v-model="clienteIdInput" placeholder="ID del cliente" class="empresa-input" style="margin-left: 1rem; min-width: 200px;" />
+          <input v-if="selectedQuery === '10' || selectedQuery === '13'" v-model="clienteIdInput" placeholder="ID del cliente" class="empresa-input" style="margin-left: 1rem; min-width: 200px;" />
           <button class="btn-run-query" @click="runQuery" :disabled="!selectedQuery || (selectedQuery === '7' && !empresaInput) || (selectedQuery === '10' && !clienteIdInput)">
             Ejecutar
           </button>
@@ -300,41 +300,63 @@ export default {
           console.log('Respuesta del backend:', response.data);
 
           this.queryTitle = `5 puntos de entrega más cercanos a la empresa "${empresa}"`;
-          this.queryHeaders = ['Dirección', 'Distancia (km)', 'Latitud', 'Longitud'];
+          this.queryHeaders = ['Dirección destino', 'Distancia (km)', 'Latitud', 'Longitud'];
 
-          this.queryResults = response.data.map(item => [
-            item.direccion || 'No disponible',
-            item.distancia?.toFixed(2) || '--',
-            item.latitud || '--',
-            item.longitud || '--'
-          ]);
+          this.queryResults = response.data.map(item => {
+            // Parsear latitud y longitud desde la WKT 'LINESTRING'
+            let lat = '--', lng = '--';
+            if (item.ruta_estimada) {
+              // Ejemplo: "LINESTRING(-70.67 -33.465,-70.685 -33.465)"
+              const match = item.ruta_estimada.match(/LINESTRING\((-?\d+(\.\d+)?)[\s,]+(-?\d+(\.\d+)?)/);
+              if (match) {
+                lng = match[1];
+                lat = match[3];
+              }
+            }
+            return [
+              item.direcciondestino || 'No disponible',
+              item.distancia_metros ? (item.distancia_metros / 1000).toFixed(2) : '--',
+              lat,
+              lng
+            ];
+          });
+
+          if (!this.queryResults.length) {
+            this.queryResults = [['No hay datos', '', '', '']];
+          }
         }
         else if (this.selectedQuery === '8') {
           const response = await detallePedidoService.getPuntosEntregaMasLejano();
           console.log('Respuesta del backend:', response.data);
 
           this.queryTitle = 'Punto de entrega más lejano desde cada empresa';
-          this.queryHeaders = ['Empresa', 'Dirección', 'Distancia (km)', 'Latitud', 'Longitud'];
+          this.queryHeaders = ['Empresa', 'Dirección', 'Distancia (km)'];
 
           this.queryResults = response.data.map(item => [
-            item.empresa || 'No disponible',
-            item.direccion || 'No disponible',
-            item.distancia?.toFixed(2) || '--',
-            item.latitud || '--',
-            item.longitud || '--'
+            item.nombreempresa || 'No disponible',
+            item.direcciondestino || 'No disponible',
+            item.distancia_km ? item.distancia_km.toFixed(2) : '--'
           ]);
+
+          if (!this.queryResults.length) {
+            this.queryResults = [['No hay datos', '', '']];
+          }
         }
+
         else if (this.selectedQuery === '9') {
           const response = await orderService.getPedidosZonasCruzadas();
           this.queryTitle = 'Pedidos cuya ruta cruza más de 2 zonas';
-          this.queryHeaders = ['ID Pedido', 'Cliente', 'Detalle', 'Zonas Cruzadas'];
-          this.queryResults = response.data.map(item => [
-            item.idPedido || '--',
-            item.cliente || '--',
-            item.detalle || '--',
-            item.zonasCruzadas || '--'
+          this.queryHeaders = ['ID Pedido', 'Empresa', 'Zonas Cruzadas'];
+          this.queryResults = (response.data || []).map(item => [
+            item.idpedido || '--',
+            item.nombreempresa || '--',
+            item.zonas_cruzadas !== undefined ? item.zonas_cruzadas : '--'
           ]);
+          if (!this.queryResults.length) {
+            this.queryResults = [['No hay datos', '', '']];
+          }
         }
+
         else if (this.selectedQuery === '10') {
           const id = this.clienteIdInput.trim();
           if (!id) {
@@ -349,13 +371,29 @@ export default {
         else if (this.selectedQuery === '11') {
           const response = await orderService.getHighDensityZones();
           this.queryTitle = 'Zonas con alta densidad de pedidos';
-          this.queryHeaders = ['Zona', 'Cantidad de pedidos', 'Coordenadas'];
-          this.queryResults = response.data.map(item => [
-            item.zona || '--',
-            item.cantidadPedidos || '--',
-            item.coordenadas ? `${item.coordenadas.lat}, ${item.coordenadas.lng}` : '--'
-          ]);
+          this.queryHeaders = ['Zona', 'Cantidad de pedidos', 'Centroide (Lon, Lat)'];
+
+          this.queryResults = (response.data || []).map(item => {
+            // Extraer lon y lat del centroWkt: POINT(-70.645 -33.452)
+            let centroide = '--';
+            if (item.centroWkt && item.centroWkt.startsWith('POINT(')) {
+              const match = item.centroWkt.match(/POINT\(([-\d.]+) ([-\d.]+)\)/);
+              if (match) {
+                centroide = `${match[1]}, ${match[2]}`;
+              }
+            }
+            return [
+              item.zonaCobertura || '--',
+              item.cantidadPedidos || '--',
+              centroide
+            ];
+          });
+
+          if (!this.queryResults.length) {
+            this.queryResults = [['No hay datos', '', '']];
+          }
         }
+
         else if (this.selectedQuery === '12') {
           // NUEVA: Clientes a más de 5km
           const response = await clienteService.getClientesMasDe5Km();
@@ -372,7 +410,6 @@ export default {
           ]);
         }
         else if (this.selectedQuery === '13') {
-          // NUEVA: Verificar cliente en zona de cobertura
           const idCliente = this.clienteIdInput?.trim();
           if (!idCliente) {
             this.queryResults = [['Debe ingresar un ID de cliente']];
@@ -380,21 +417,33 @@ export default {
           }
           const response = await clienteService.verificarClienteEnZona(idCliente);
           this.queryTitle = `¿Cliente #${idCliente} está en zona de cobertura? (buffer 1km)`;
-          this.queryHeaders = ['ID Cliente', 'En zona', 'Detalle/Zona'];
+          this.queryHeaders = [
+            'ID Cliente',
+            'Nombre',
+            'En zona',
+            'ID Zona',
+            'Detalle/Zona'
+          ];
           this.queryResults = (response.data || []).map(item => [
-            item.idCliente || '--',
-            item.enZona ? 'Sí' : 'No',
-            item.detalle || '--'
+            item.cliente_id ?? '--',
+            item.nombre ?? '--',
+            item.zona_id ? 'Sí' : 'No',
+            item.zona_id ?? '--',
+            item.nombre_zona ?? '--'
           ]);
         }
+
         else if (this.selectedQuery === '14') {
           const response = await repartidorService.getDistanciasRecorridasUltimoMes();
           this.queryTitle = 'Distancia recorrida por repartidor (último mes)';
           this.queryHeaders = ['ID Repartidor', 'Nombre', 'Distancia recorrida (km)'];
           this.queryResults = (response.data || []).map(item => [
-            item.repartidorId || '--',
-            item.nombre || '--',
-            item.distanciaTotalMetros ? (item.distanciaTotalMetros / 1000).toFixed(2) : '--'
+            item.repartidorId ?? '--',
+            item.nombre ?? '--',
+            // Si quieres mostrar SIEMPRE el número con 2 decimales y el sufijo "km":
+            item.distanciaTotalMetros != null
+              ? `${(item.distanciaTotalMetros / 1000).toLocaleString('es-CL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} km`
+              : '--'
           ]);
         }
 
