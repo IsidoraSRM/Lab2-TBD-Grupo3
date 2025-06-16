@@ -36,8 +36,9 @@ Este repositorio contiene el proyecto del Lab2 de TBD, desarrollado por el Grupo
 
 ## Configuración de la Base de Datos
 1. Crear una base de datos con el nombre `Lab2TBD`
-2. Ejecutar el contenido del archivo `createLab2.sql`, para crear las tablas
-3. Insertar los datos de archivo `insertFinalLab2.sql`
+2. Ejecutar el contenido del archivo `createLab2.sql`, para crear las tablas.
+3. Ejecutar el archivo `dump.sql` para tener todas las funcionalidades del proyecto.
+4. Insertar los datos de archivo `insertFinalLab2.sql`.
 
 ## Instalación y Ejecución del Backend
 1. Abir la carpeta backend en Intellij o algún otro editor de codigo.
