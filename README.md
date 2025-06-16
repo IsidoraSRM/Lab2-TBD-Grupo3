@@ -35,14 +35,14 @@ Este repositorio contiene el proyecto del Lab2 de TBD, desarrollado por el Grupo
   npm install -g @vue/cli
 
 ## Configuración de la Base de Datos
-1. Crear una base de datos con el nombre Lab2TBD
-2. Ejecutar el contenido del archivo createLab2.sql, para crear las tablas
-3. Insertar los datos de archivo insertFinalLab2.sql
+1. Crear una base de datos con el nombre `Lab2TBD`
+2. Ejecutar el contenido del archivo `createLab2.sql`, para crear las tablas
+3. Insertar los datos de archivo `insertFinalLab2.sql`
 
 ## Instalación y Ejecución del Backend
 1. Abir la carpeta backend en Intellij o algún otro editor de codigo.
 2. Configurar el archivo application.properties con el usuario y contraseña de postgres.
-3. Ejecutar BackendApplication
+3. Ejecutar `BackendApplication`
 
 ## Instalación y Ejecución del Frontend
 1. Abrir en una terminal la carpeta frontend-delivery:
