@@ -48,7 +48,10 @@ INSERT INTO usuarios (rut, name_param, email, phone, birthdate, password, role, 
 ('01.234.567-8', 'Ricardo Mora', 'ricardo.mora@email.com',
  '555-100-2010', '1991-02-28',
  '$2y$10$bZM2F0RgXSxZCHa8fuTNq.dvH6gcT8Jr5H560GudHbYpCCL6YwPGG', 'CLIENTE',
- ST_SetSRID(ST_MakePoint(-70.7400, -33.4150), 4326));
+ ST_SetSRID(ST_MakePoint(-70.7400, -33.4150), 4326)),
+('12.345.678-9','Pepito Perez','pepito.perez@email.com','555-100-2011','1985-03-15','$2y$10$bZM2F0RgXSxZCHa8fuTNq.dvH6gcT8Jr5H560GudHbYpCCL6YwPGG',
+'CLIENTE',ST_SetSRID(ST_MakePoint(-71.2486, -34.9828), 4326));
+
 
 -- Insertar repartidores como usuarios (TRABAJADORES) (contraseña: trabajador1)
 INSERT INTO usuarios (rut, name_param, email, phone, birthdate, password, role, ubicacion) VALUES
@@ -139,7 +142,7 @@ INSERT INTO cliente (nombre, direccion, email, telefono, ubicacion) VALUES
 
 ('Pepito Perez', 'Av. Manso de Velasco 456, Curicó',
  'pepito.perez@email.com', '555-100-2011',
- ST_SetSRID(ST_MakePoint(-71.2486, -34.9828), 4326);
+ ST_SetSRID(ST_MakePoint(-71.2486, -34.9828), 4326));
 
 -------------------------------
 -- Insertar registros en la tabla repartidor
