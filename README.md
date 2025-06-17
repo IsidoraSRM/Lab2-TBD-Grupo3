@@ -40,6 +40,8 @@ Este repositorio contiene el proyecto del Lab2 de TBD, desarrollado por el Grupo
 3. Ejecutar el archivo `dump.sql` para tener todas las funcionalidades del proyecto.
 4. Insertar los datos de archivo `insertFinalLab2.sql`.
 5. Insertar el resto de los datos del archivo `insert2FinalLab2.sql`.
+   
+   ⚠️ **Los archivos .sql que se deben ejecutar estan en la carpeta `Lab2-TBD-Grupo3/Backend/Database`** ⚠️
 
 ## Instalación y Ejecución del Backend
 1. Abir la carpeta backend en Intellij o algún otro editor de codigo.
